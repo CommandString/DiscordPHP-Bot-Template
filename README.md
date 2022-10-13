@@ -4,7 +4,11 @@ This repo is designed to help design a structure for DiscordPHP bots.
 
 # Important Resources #
 [DiscordPHP Class Reference](https://discord-php.github.io/DiscordPHP/guide/)
+
 [DiscordPHP Documentation](https://discord-php.github.io/DiscordPHP/)
+
+[DiscordPHP Discord Server](https://discord.gg/kM7wrJUYU9)
+*Only ask questions relevant to using DiscordPHP's own wrapper, not on how to use this.*
 
 # Environment Configuration #
 1. `php index.php` an exception should be thrown asking you configure `env.json`.
@@ -15,7 +19,7 @@ This repo is designed to help design a structure for DiscordPHP bots.
 Config::getInstance()->variableName;
 ```
 
-### Adding Environment Variables At Runtime ###
+### Adding Environment Variables at Runtime ###
 ```php
 Config::getInstance()->variableName = "value";
 ```
@@ -54,9 +58,9 @@ Config::getInstance()->variableName = "value";
 	    }
 	}
 	```
-	3. replace `EVENT_NAME` with the name of your event
-	4. Add insert the code you'd like to run when that event is triggered into the handler method. When defining arguments that are passed into the event handler make sure to set their default value to null. *This is due to how extending abstract classes work you cannot have required arguments that aren't defined in the original abstract class definition.*
-	5. If you want your event handler to only run once then change the return from `false` to `true` in the `runOnce` method
+3. replace `EVENT_NAME` with the name of your event
+4. Insert the code you'd like to run when that event is triggered into the handler method. When defining arguments that are passed into the event handler make sure to set their default value to null. *This is due to how extending abstract classes work as you cannot have required arguments that aren't defined in the parent class.*
+5. If you want your event handler to only run once then change the return from `false` to `true` in the `runOnce` method
 
 After following the steps above you should be left with something that looks like this.
 ```php
@@ -71,7 +75,7 @@ use Discord\WebSockets\Event;
 /**
  * @inheritDoc Template
  */
-class MESSAGE_CREATE extends \cmdstr\Discord\Events\Template {
+class MESSAGE_CREATE extends Template {
     public function handler(Message $message = null, Discord $discord = null): void
     {
         if ($message->author->bot) {
@@ -140,8 +144,8 @@ use cmdstr\Discord\Events\MESSAGE_CREATE;
 	    }
 	}
 	```
-2.  Replace `CommandName` with your command name and `CommandDescription` with the description of your command. 
-3. Add the code that will be invoked inside your `handler` method and add any additional command configuration into the `getConfig` method. *Advance users can also return an array rather than using the CommandBuilder*. 
+2. Replace `CommandName` with your command name and `CommandDescription` with the description of your command. 
+3. Add the code that will be invoked inside your `handler` method and add any additional command configuration required into the `getConfig` method. *Advance users can also return an array rather than using the CommandBuilder*. 
 4. If your command is guild specific then you can add the id of the guild inside the `getGuild` method, if not leave the return as an empty string.
 After completing the steps above you should be left with something similar to...
 ```php
@@ -182,12 +186,12 @@ class Ping extends Template {
 }
 ```
 
-### Adding & Updating Commands to Your Application ###
+### Adding & Updating Commands in Your Application ###
 You can use the PHP script below add a command to your application or update an existing one.
 `php command save commandName`
 *You can list as many commands as you'd like after the action*
 
-### Deleting Commands from your Application ###
+### Deleting Commands From Your Application ###
 Similar to adding and updating commands to your application you can just swap save with delete.
 `php command delete commandName`
 *Multiple command names can be specified here as well*

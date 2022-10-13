@@ -22,7 +22,7 @@ abstract class Template {
             case "config":
                 $config = $this->getConfig();
 
-                if (gettype($config) === "array") {
+                if (is_array($config)) {
                     return $config;
                 }
 
