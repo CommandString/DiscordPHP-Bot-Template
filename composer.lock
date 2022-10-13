@@ -4,48 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f8e537d0e2e743ff9bbd95e9da51837",
+    "content-hash": "1ac250adfb9ac96402fc8ed1bbd63307",
     "packages": [
-        {
-            "name": "cmdstr/mysqli",
-            "version": "v1.4.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CommandString/cmdstr-mysqli.git",
-                "reference": "5a61657af6f98d05fde84c9771acf37873162ef8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CommandString/cmdstr-mysqli/zipball/5a61657af6f98d05fde84c9771acf37873162ef8",
-                "reference": "5a61657af6f98d05fde84c9771acf37873162ef8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "cmdstr\\mysqli\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Robert Snedeker",
-                    "homepage": "https://cmdstrcl.ml"
-                }
-            ],
-            "description": "A simpler way to use Mysqli in PHP",
-            "support": {
-                "issues": "https://github.com/CommandString/cmdstr-mysqli/issues",
-                "source": "https://github.com/CommandString/cmdstr-mysqli/tree/v1.4.8"
-            },
-            "time": "2022-09-11T17:18:23+00:00"
-        },
         {
             "name": "discord-php/http",
             "version": "v9.1.6",
