@@ -17,7 +17,7 @@ class Ping extends Template {
 
     public function getName(): string
     {
-        return "Ping";
+        return "ping";
     }
 
     public function getConfig(): CommandBuilder|array
