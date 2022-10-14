@@ -69,14 +69,19 @@ abstract class Template {
      */
     public function delete(): self
     {
-        Config::getInstance()->discord->application->commands->freshen()->done(function ($results) {
+        /**
+         * @var \Discord\Discord
+         */
+        $discord = Config::getInstance()->discord;
+        
+        $discord->application->commands->freshen()->done(function ($results) use ($discord) {
             $command = $results->get("name", $this->name);
 
             if (is_null($command)) {
                 throw new Exception("Command $this->name isn't registered to the discord bot!");
             }
 
-            Config::getInstance()->discord->application->commands->delete();
+            $discord->application->commands->delete($command);
         });
 
         return $this;
@@ -89,10 +94,15 @@ abstract class Template {
     {
         $command = new Command(Config::getInstance()->discord, $this->config);
 
+        /**
+         * @var \Discord\Discord
+         */
+        $discord = Config::getInstance()->discord;
+
         if ($this->isGuildCommand()) {
-            Config::getInstance()->discord->guilds[$this->guild]->commands->save($command);
+            $discord->guilds[$this->guild]->commands->save($command);
         } else {
-            Config::getInstance()->discord->application->commands->save($command);
+            $discord->application->commands->save($command);
         }
 
         return $this;
@@ -103,7 +113,12 @@ abstract class Template {
      */
     public function listen(): void
     {
-        Config::getInstance()->discord->listenCommand($this->name, function (Interaction $interaction) {
+        /**
+         * @var \Discord\Discord
+         */
+        $discord = Config::getInstance()->discord;
+        
+        $discord->listenCommand($this->name, function (Interaction $interaction) {
             $this->handler($interaction);
         });
     }
