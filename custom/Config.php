@@ -64,8 +64,6 @@ class Config {
     }
 
     /**
-     * @param bool $development
-     * 
      * @return self
      */
     public static function getInstance(): self
