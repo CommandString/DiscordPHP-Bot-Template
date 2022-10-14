@@ -32,12 +32,12 @@ Config::getInstance()->discord->on("ready", function () use ($argv, $action) {
 
         (new $command_class)->$action();
     
-        echo "A request for $command to be {$action}d was sent!";
-
-        Loop::addTimer(3, function () {
-            Config::getInstance()->discord->close();
-        });
+        echo "\nA request for command $command to be {$action}d was sent!\n\n";
     }
+    
+    Loop::addTimer(3, function () {
+        Config::getInstance()->discord->close();
+    });
 });
 
 Config::getInstance()->discord->run();
