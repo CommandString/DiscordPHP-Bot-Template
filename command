@@ -27,7 +27,7 @@ Config::getInstance()->discord->on("ready", function () use ($argv, $action) {
         $command_class = "cmdstr\\Discord\\Commands\\$command";
     
         if (!class_exists($command_class)) {
-            throw new Exception("$command cannot be found!");
+            throw new Exception("Command $command cannot be found!");
         }
 
         (new $command_class)->$action();
