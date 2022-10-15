@@ -15,6 +15,10 @@ class Ping extends Template {
         $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong!'));
     }
 
+    public function autocomplete(Interaction $interaction): void {
+        
+    }
+
     public function getName(): string
     {
         return "ping";
