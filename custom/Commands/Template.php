@@ -42,6 +42,13 @@ abstract class Template {
     abstract public function handler(Interaction $interaction): void;
 
     /**
+     * @param Interaction $interaction
+     * 
+     * @return void
+     */
+    abstract public function autocomplete(Interaction $interaction): void;
+
+    /**
      * @return string
      */
     abstract public function getName(): string;
@@ -120,6 +127,8 @@ abstract class Template {
         
         $discord->listenCommand($this->name, function (Interaction $interaction) {
             $this->handler($interaction);
+        }, function (Interaction $interaction) {
+            $this->autocomplete($interaction);
         });
     }
 }
