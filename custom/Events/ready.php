@@ -2,6 +2,7 @@
 
 namespace cmdstr\Discord\Events;
 
+use cmdstr\Discord\Commands\Ping;
 use Discord\Discord;
 
 /**
@@ -11,6 +12,8 @@ class ready extends Template {
     public function handler(Discord $discord = null): void
     {
         echo "\n\n{$discord->application->name} ready!\n\n";
+
+        (new Ping)->listen();
     }
   
     public function getEvent(): string
