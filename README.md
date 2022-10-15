@@ -125,6 +125,10 @@ use cmdstr\Discord\Events\MESSAGE_CREATE;
 	    public function handler(Interaction $interaction): void
 	    {
 	    }
+		
+	    public function autocomplete(Interaction $interaction): void
+	    {
+	    }
 
 	    public function getName(): string
 	    {
@@ -145,8 +149,9 @@ use cmdstr\Discord\Events\MESSAGE_CREATE;
 	}
 	```
 2. Replace `CommandName` with your command name and `CommandDescription` with the description of your command. 
-3. Add the code that will be invoked inside your `handler` method and add any additional command configuration required into the `getConfig` method. *Advance users can also return an array rather than using the CommandBuilder*. 
-4. If your command is guild specific then you can add the id of the guild inside the `getGuild` method, if not leave the return as an empty string.
+3. Add the code that will be invoked inside your `handler` method and add any additional command configuration required into the `getConfig` method. *Advance users can also return an array rather than using the CommandBuilder*.
+4. *If your command has autocomplete enabled then put the code relevant to that inside the autocomplete method*
+5. If your command is guild specific then you can add the id of the guild inside the `getGuild` method, if not leave the return as an empty string.
 After completing the steps above you should be left with something similar to...
 ```php
 <?php
@@ -165,6 +170,10 @@ class Ping extends Template {
     {
         $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong!'));
     }
+		
+	public function autocomplete(Interaction $interaction): void
+	{
+	}
 
     public function getName(): string
     {
