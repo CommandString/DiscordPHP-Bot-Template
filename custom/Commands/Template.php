@@ -80,16 +80,26 @@ abstract class Template {
          * @var \Discord\Discord
          */
         $discord = Config::getInstance()->discord;
-        
-        $discord->application->commands->freshen()->done(function ($results) use ($discord) {
-            $command = $results->get("name", $this->name);
+
+        $function = function ($commands) use ($discord) {
+            $command = $commands->get("name", $this->name);
 
             if (is_null($command)) {
                 throw new Exception("Command $this->name isn't registered to the discord bot!");
             }
 
-            $discord->application->commands->delete($command);
-        });
+            if ($this->isGuildCommand()) {
+                $discord->application->commands->delete($command);
+            } else {
+                $discord->guilds->get("id", $this->guild)->commands->delete($command);
+            }
+        };
+
+        if ($this->isGuildCommand()) {
+            $discord->guilds->get("id", $this->guild)->commands->freshen()->done($function);
+        } else {        
+            $discord->application->commands->freshen()->done($function);
+        }
 
         return $this;
     }
