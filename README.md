@@ -205,6 +205,9 @@ Similar to adding and updating commands to your application you can just swap sa
 `php command delete commandName`
 *Multiple command names can be specified here as well*
 
+### Deleting All Commands From Your Application ###
+`php command delete all`
+
 ### Listening for Commands ###
 Inside the already created `ready event` handler, `./custom/Events/ready.php`, create an anonymous class for your command and invoke it's `listen` method.
 ```php 
