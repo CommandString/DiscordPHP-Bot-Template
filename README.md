@@ -198,6 +198,7 @@ class Ping extends Template {
 ### Adding & Updating Commands in Your Application ###
 You can use the PHP script below add a command to your application or update an existing one.
 `php command save commandName`
+
 *You can list as many commands as you'd like after the action*
 
 ### Deleting Commands From Your Application ###
