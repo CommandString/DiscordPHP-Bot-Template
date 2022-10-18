@@ -18,26 +18,56 @@ if (!in_array($action, ["save", "delete"])) {
     throw new Exception("$action is an invalid action, you can only save and delete commands!");
 }
 
-Config::getInstance()->discord = new Discord([
-    "token" => Config::getInstance()->token
+$config = Config::getInstance();
+
+$config->discord = new Discord([
+    "token" => $config->token
 ]);
 
-Config::getInstance()->discord->on("ready", function () use ($argv, $action) {
-    foreach ($argv as $command) {
-        $command_class = "cmdstr\\Discord\\Commands\\$command";
-    
-        if (!class_exists($command_class)) {
-            throw new Exception("Command $command cannot be found!");
-        }
+$config->mysqli_driver = new mysqli($config->mysql->host, $config->mysql->username, $config->mysql->password, $config->mysql->database);
 
-        (new $command_class)->$action();
+$config->discord->on("ready", function () use ($argv, $action) {
+    /**
+     * @var \Discord\Discord
+     */
+    $discord = Config::getInstance()->discord;
     
-        echo "\nA request for command $command to be {$action}d was sent!\n\n";
+
+    if ($action === "delete" && $argv[2] === "all") {
+        $discord->application->commands->freshen()->done(function ($results) use ($discord) {
+            foreach ($results as $command) {
+                $discord->application->commands->delete($command);
+            }
+        });
+
+        foreach ($discord->guilds as $guild) {
+            $guild->commands->freshen()->done(function ($results) use ($guild) {
+                foreach ($results as $command) {
+                    $guild->commands->delete($command);
+                }
+            });
+        }
+    
+        Loop::addTimer(30, function () {
+            Config::getInstance()->discord->close();
+        });
+    } else {
+        foreach ($argv as $command) {
+            $command_class = "cmdstr\\Discord\\Commands\\$command";
+        
+            if (!class_exists($command_class)) {
+                throw new Exception("Command $command cannot be found!");
+            }
+
+            (new $command_class)->$action();
+        
+            echo "\nA request for command $command to be {$action}d was sent!\n\n";
+        }
+    
+        Loop::addTimer(30, function () {
+            Config::getInstance()->discord->close();
+        });
     }
-    
-    Loop::addTimer(3, function () {
-        Config::getInstance()->discord->close();
-    });
 });
 
-Config::getInstance()->discord->run();
+$config->discord->run();
