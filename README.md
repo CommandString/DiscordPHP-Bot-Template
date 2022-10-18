@@ -203,6 +203,7 @@ You can use the PHP script below add a command to your application or update an 
 ### Deleting Commands From Your Application ###
 Similar to adding and updating commands to your application you can just swap save with delete.
 `php command delete commandName`
+
 *Multiple command names can be specified here as well*
 
 ### Deleting All Commands From Your Application ###
