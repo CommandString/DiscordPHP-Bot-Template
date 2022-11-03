@@ -12,10 +12,8 @@ class Config {
     private static self $instance;
     private object $env;
 
-    public function __construct()
+    public function __construct($file_path = "./env.json")
     {
-        $file_path = "./env.json";
-
         if (!file_exists($file_path)) {
             file_put_contents($file_path, file_get_contents("./env.example.json"));
             throw new Exception("Please configure env.json!");
