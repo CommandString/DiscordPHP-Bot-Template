@@ -1,8 +1,8 @@
 <?php
 
-namespace cmdstr\Discord\Events;
+namespace Discord\Bot\Events;
 
-use cmdstr\Discord\Commands\Ping;
+use Discord\Bot\Commands\Ping;
 use Discord\Discord;
 
 /**

@@ -1,13 +1,13 @@
 <?php
 
-use cmdstr\Discord\Config;
-use cmdstr\Discord\Events\ready;
+use Discord\Bot\Config;
+use Discord\Bot\Events\ready;
 use Discord\Discord;
 use Discord\WebSockets\Intents;
 
 require_once "./vendor/autoload.php";
 
-$config = Config::getInstance();
+$config = new Config();
 
 $config->discord = new Discord([
     "token" => $config->token,

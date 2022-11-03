@@ -1,6 +1,6 @@
 <?php
 
-namespace cmdstr\Discord;
+namespace Discord\Bot;
 
 use Exception;
 use InvalidArgumentException;
@@ -25,6 +25,10 @@ class Config {
 
         if (empty($this->env->token)) {
             throw new Exception("You must define a token!");
+        }
+
+        if (!isset(self::$instance)) {
+            self::$instance = $this;
         }
     }
 
@@ -66,7 +70,7 @@ class Config {
     /**
      * @return self
      */
-    public static function getInstance(): self
+    public static function get(): self
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();

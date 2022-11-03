@@ -1,6 +1,6 @@
 <?php
 
-namespace cmdstr\Discord\Events;
+namespace Discord\Bot\Events;
 
 use Discord\Discord;
 use Discord\Parts\Channel\Message;

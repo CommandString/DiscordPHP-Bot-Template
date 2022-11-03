@@ -1,6 +1,6 @@
 <?php
 
-namespace cmdstr\Discord\Commands;
+namespace Discord\Bot\Commands;
 
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\MessageBuilder;
@@ -12,7 +12,7 @@ use Discord\Parts\Interactions\Interaction;
 class Ping extends Template {
     public function handler(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong!'));
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong :ping_pong:'));
     }
 
     public function autocomplete(Interaction $interaction): void {

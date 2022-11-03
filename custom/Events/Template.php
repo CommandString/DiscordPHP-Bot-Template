@@ -1,8 +1,8 @@
 <?php
 
-namespace cmdstr\Discord\Events;
+namespace Discord\Bot\Events;
 
-use cmdstr\Discord\Config;
+use Discord\Bot\Config;
 
 abstract class Template {
     /**
@@ -40,11 +40,11 @@ abstract class Template {
     public function listen(): void
     {
         if ($this->runOnce) {
-            Config::getInstance()->discord->once($this->event, function (mixed ...$args) {
+            Config::get()->discord->once($this->event, function (mixed ...$args) {
                 $this->handler(...$args);
             });
         } else {
-            Config::getInstance()->discord->on($this->event, function (mixed ...$args) {
+            Config::get()->discord->on($this->event, function (mixed ...$args) {
                 $this->handler(...$args);
             });
         }

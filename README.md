@@ -16,17 +16,16 @@ This repo is designed to help design a structure for DiscordPHP bots.
 
 ### Retrieving Environment Variables ###
 ```php
-Config::getInstance()->variableName;
+Config::get()->variableName;
 ```
 
 ### Adding Environment Variables at Runtime ###
 ```php
-Config::getInstance()->variableName = "value";
+Config::get()->variableName = "value";
 ```
 
 ### Important Notes About Environment Variables ###
 * Environment variables are treated similarly to readonly properties
-* **DO NOT** instantiate the Config yourself, instead use the `getInstance static method` as the class uses the singleton structure.
 
 # Events #
 ### Creating Events ###
@@ -34,7 +33,7 @@ Config::getInstance()->variableName = "value";
 	```php
 	<?php
 
-	namespace cmdstr\Discord\Events;
+	namespace Discord\Bot\Events;
 
 	use Discord\Discord;
 	use Discord\WebSockets\Event;
@@ -66,7 +65,7 @@ After following the steps above you should be left with something that looks lik
 ```php
 <?php
 
-namespace cmdstr\Discord\Events;
+namespace Discord\Bot\Events;
 
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
@@ -100,7 +99,7 @@ class MESSAGE_CREATE extends Template {
 ### Listening for Events ###
 Inside `index.php`, instantiate an anonymous class and invoke it's `listen` method
 ```php
-use cmdstr\Discord\Events\MESSAGE_CREATE;
+use Discord\Bot\Events\MESSAGE_CREATE;
 // ...
 (new MESSAGE_CREATE)->listen();
 // ...
@@ -113,7 +112,7 @@ use cmdstr\Discord\Events\MESSAGE_CREATE;
 	```php
 	<?php
 
-	namespace cmdstr\Discord\Commands;
+	namespace Discord\Bot\Commands;
 
 	use Discord\Builders\CommandBuilder;
 	use Discord\Parts\Interactions\Interaction;
@@ -156,7 +155,7 @@ After completing the steps above you should be left with something similar to...
 ```php
 <?php
 
-namespace cmdstr\Discord\Commands;
+namespace Discord\Bot\Commands;
 
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\MessageBuilder;
@@ -213,7 +212,7 @@ Similar to adding and updating commands to your application you can just swap sa
 ### Listening for Commands ###
 Inside the already created `ready event` handler, `./custom/Events/ready.php`, create an anonymous class for your command and invoke it's `listen` method.
 ```php 
-use cmdstr\Discord\Commands\Ping;
+use Discord\Bot\Commands\Ping;
 // ...
 public function handler(Discord $discord = null): void
 {

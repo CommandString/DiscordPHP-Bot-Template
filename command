@@ -1,6 +1,6 @@
 <?php
 
-use cmdstr\Discord\Config;
+use Discord\Bot\Config;
 use Discord\Discord;
 use React\EventLoop\Loop;
 
@@ -18,19 +18,17 @@ if (!in_array($action, ["save", "delete"])) {
     throw new Exception("$action is an invalid action, you can only save and delete commands!");
 }
 
-$config = Config::getInstance();
+$config = Config::get();
 
 $config->discord = new Discord([
     "token" => $config->token
 ]);
 
-$config->mysqli_driver = new mysqli($config->mysql->host, $config->mysql->username, $config->mysql->password, $config->mysql->database);
-
 $config->discord->on("ready", function () use ($argv, $action) {
     /**
      * @var \Discord\Discord
      */
-    $discord = Config::getInstance()->discord;
+    $discord = Config::get()->discord;
     
 
     if ($action === "delete" && $argv[2] === "all") {
@@ -49,11 +47,11 @@ $config->discord->on("ready", function () use ($argv, $action) {
         }
     
         Loop::addTimer(30, function () {
-            Config::getInstance()->discord->close();
+            Config::get()->discord->close();
         });
     } else {
         foreach ($argv as $command) {
-            $command_class = "cmdstr\\Discord\\Commands\\$command";
+            $command_class = "Discord\\Bot\\Commands\\$command";
         
             if (!class_exists($command_class)) {
                 throw new Exception("Command $command cannot be found!");
@@ -65,7 +63,7 @@ $config->discord->on("ready", function () use ($argv, $action) {
         }
     
         Loop::addTimer(30, function () {
-            Config::getInstance()->discord->close();
+            Config::get()->discord->close();
         });
     }
 });

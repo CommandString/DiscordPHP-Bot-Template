@@ -1,8 +1,8 @@
 <?php
 
-namespace cmdstr\Discord\Commands;
+namespace Discord\Bot\Commands;
 
-use cmdstr\Discord\Config;
+use Discord\Bot\Config;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command;
 use Discord\Parts\Interactions\Interaction;
@@ -79,7 +79,7 @@ abstract class Template {
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::getInstance()->discord;
+        $discord = Config::get()->discord;
 
         $function = function ($commands) use ($discord) {
             $command = $commands->get("name", $this->name);
@@ -109,12 +109,12 @@ abstract class Template {
      */
     public function save(): self
     {
-        $command = new Command(Config::getInstance()->discord, $this->config);
+        $command = new Command(Config::get()->discord, $this->config);
 
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::getInstance()->discord;
+        $discord = Config::get()->discord;
 
         if ($this->isGuildCommand()) {
             $discord->guilds[$this->guild]->commands->save($command);
@@ -133,7 +133,7 @@ abstract class Template {
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::getInstance()->discord;
+        $discord = Config::get()->discord;
         
         $discord->listenCommand($this->name, function (Interaction $interaction) {
             $this->handler($interaction);
