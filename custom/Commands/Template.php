@@ -88,7 +88,7 @@ abstract class Template {
                 throw new Exception("Command $this->name isn't registered to the discord bot!");
             }
 
-            if ($this->isGuildCommand()) {
+            if (!$this->isGuildCommand()) {
                 $discord->application->commands->delete($command);
             } else {
                 $discord->guilds->get("id", $this->guild)->commands->delete($command);
