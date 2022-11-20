@@ -1,6 +1,6 @@
 
-# DiscordPHP Design Structure
-This repo is designed to help design a structure for DiscordPHP bots.
+# DiscordPHP Bot Template
+This repo is a boiler plate for discord bots made in PHP :)
 
 # Important Resources #
 [DiscordPHP Class Reference](https://discord-php.github.io/DiscordPHP/guide/)
