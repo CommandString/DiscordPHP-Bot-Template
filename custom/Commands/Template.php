@@ -135,10 +135,25 @@ abstract class Template {
          */
         $discord = Config::get()->discord;
         
-        $discord->listenCommand($this->name, function (Interaction $interaction) {
-            $this->handler($interaction);
-        }, function (Interaction $interaction) {
-            $this->autocomplete($interaction);
-        });
+        $listen = function (string|array $name) use ($discord) {
+            $discord->listenCommand($name, function (Interaction $interaction) {
+                $this->handler($interaction);
+            }, function (Interaction $interaction) {
+                $this->autocomplete($interaction);
+            });
+        };
+
+        if (!is_array($this->name)) {
+            $listen($this->name);
+        } else {
+            foreach ($this->name as $name) {
+                if (!is_array($name)) {
+                    $listen($name);
+                } else {
+                    $names = $name;
+                    $listen([$this->name[0], ...$names]);
+                }
+            }
+        }
     }
 }
