@@ -21,7 +21,7 @@ class Up extends Template {
 
     public function handler(Interaction $interaction): void
     {
-        // yes I know, technically I'm just calling methods from Randomize but ssshhh...
+        // yes I know, technically I'm just calling methods from Randomize but you get the point...
         $this->randomize->handler($interaction);
     }
 
