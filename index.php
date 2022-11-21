@@ -1,20 +1,40 @@
 <?php
 
-use Discord\Bot\Config;
+# _______  _____  _______ _______ _______ __   _ ______        _______ _______  ______ _____ __   _  ______
+# |       |     | |  |  | |  |  | |_____| | \  | |     \       |______    |    |_____/   |   | \  | |  ____
+# |_____  |_____| |  |  | |  |  | |     | |  \_| |_____/ _____ ______|    |    |    \_ __|__ |  \_| |_____|
+
+use Discord\Bot\Env;
 use Discord\Bot\Events\ready;
 use Discord\Discord;
 use Discord\WebSockets\Intents;
 
 require_once "./vendor/autoload.php";
 
-$config = new Config();
+# _______ __   _ _    _ _____  ______  _____  __   _ _______ _______ __   _ _______
+# |______ | \  |  \  /    |   |_____/ |     | | \  | |  |  | |______ | \  |    |   
+# |______ |  \_|   \/   __|__ |    \_ |_____| |  \_| |  |  | |______ |  \_|    |   
 
-$config->discord = new Discord([
-    "token" => $config->token,
+$env = new Env();
+
+# ______  _____ _______ _______  _____   ______ ______ 
+# |     \   |   |______ |       |     | |_____/ |     \
+# |_____/ __|__ ______| |_____  |_____| |    \_ |_____/
+
+$env->discord = new Discord([
+    "token" => $env->token,
     "loadAllMembers" => true,
     "intents" => Intents::getAllIntents()
 ]);
 
+# _______ _    _ _______ __   _ _______ _______
+# |______  \  /  |______ | \  |    |    |______
+# |______   \/   |______ |  \_|    |    ______|
+
 (new ready)->listen();
 
-$config->discord->run();
+#  ______ _     _ __   _
+# |_____/ |     | | \  |
+# |    \_ |_____| |  \_|
+
+$env->discord->run();
