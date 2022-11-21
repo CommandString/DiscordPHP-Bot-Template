@@ -6,9 +6,6 @@ use Discord\Bot\Commands\Template;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
 
-/**
- * @inheritDoc CommandTemplate
- */
 class Example extends Template {
     public function handler(Interaction $interaction): void
     {

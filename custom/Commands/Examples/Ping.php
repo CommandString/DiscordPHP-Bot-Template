@@ -7,9 +7,6 @@ use Discord\Builders\CommandBuilder;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 
-/**
- * @inheritDoc CommandTemplate
- */
 class Ping extends Template {
     public function handler(Interaction $interaction): void
     {

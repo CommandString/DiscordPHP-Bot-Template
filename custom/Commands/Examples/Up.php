@@ -9,9 +9,6 @@ use Discord\Parts\Interactions\Interaction;
 
 // THIS SHOWS THAT SUBCOMMANDS CAN HAVE SEPARATE HANDLERS
 
-/**
- * @inheritDoc CommandTemplate
- */
 class Up extends Template {
     private Randomize $randomize;
 

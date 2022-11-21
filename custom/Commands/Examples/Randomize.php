@@ -14,9 +14,6 @@ use Exception;
 
 // This is used for testing the new getName() method update and a decent example of a more complex command for beginners
 
-/**
- * @inheritDoc CommandTemplate
- */
 class Randomize extends Template {
     public function handler(Interaction $interaction): void
     {
