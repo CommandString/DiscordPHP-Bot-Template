@@ -51,7 +51,7 @@ abstract class Template {
     /**
      * @return string
      */
-    abstract public function getName(): string;
+    abstract public function getName(): string|array;
 
     /**
      * @return CommandBuilder
@@ -136,11 +136,15 @@ abstract class Template {
         $discord = Env::get()->discord;
         
         $listen = function (string|array $name) use ($discord) {
-            $discord->listenCommand($name, function (Interaction $interaction) {
-                $this->handler($interaction);
-            }, function (Interaction $interaction) {
-                $this->autocomplete($interaction);
-            });
+            try {
+                $discord->listenCommand($name, function (Interaction $interaction) {
+                    $this->handler($interaction);
+                }, function (Interaction $interaction) {
+                    $this->autocomplete($interaction);
+                });
+            } catch (\LogicException $e) {
+                echo "Warning caught: {$e->getMessage()}\nIf this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)";
+            }
         };
 
         if (!is_array($this->name)) {
