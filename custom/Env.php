@@ -8,7 +8,7 @@ use InvalidArgumentException;
 /**
  * Configuration Singleton Class
  */
-class Config {
+class Env {
     private static self $instance;
     private object $env;
 

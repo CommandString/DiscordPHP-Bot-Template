@@ -2,7 +2,7 @@
 
 namespace Discord\Bot\Commands;
 
-use Discord\Bot\Config;
+use Discord\Bot\Env;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command;
 use Discord\Parts\Interactions\Interaction;
@@ -51,7 +51,7 @@ abstract class Template {
     /**
      * @return string
      */
-    abstract public function getName(): string;
+    abstract public function getName(): string|array;
 
     /**
      * @return CommandBuilder
@@ -79,7 +79,7 @@ abstract class Template {
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::get()->discord;
+        $discord = Env::get()->discord;
 
         $function = function ($commands) use ($discord) {
             $command = $commands->get("name", $this->name);
@@ -109,12 +109,12 @@ abstract class Template {
      */
     public function save(): self
     {
-        $command = new Command(Config::get()->discord, $this->config);
+        $command = new Command(Env::get()->discord, $this->config);
 
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::get()->discord;
+        $discord = Env::get()->discord;
 
         if ($this->isGuildCommand()) {
             $discord->guilds[$this->guild]->commands->save($command);
@@ -133,12 +133,31 @@ abstract class Template {
         /**
          * @var \Discord\Discord
          */
-        $discord = Config::get()->discord;
+        $discord = Env::get()->discord;
         
-        $discord->listenCommand($this->name, function (Interaction $interaction) {
-            $this->handler($interaction);
-        }, function (Interaction $interaction) {
-            $this->autocomplete($interaction);
-        });
+        $listen = function (string|array $name) use ($discord) {
+            try {
+                $discord->listenCommand($name, function (Interaction $interaction) {
+                    $this->handler($interaction);
+                }, function (Interaction $interaction) {
+                    $this->autocomplete($interaction);
+                });
+            } catch (\LogicException $e) {
+                echo "Warning caught: {$e->getMessage()}\nIf this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)\n";
+            }
+        };
+
+        if (!is_array($this->name)) {
+            $listen($this->name);
+        } else {
+            foreach ($this->name as $name) {
+                if (!is_array($name)) {
+                    $listen($name);
+                } else {
+                    $names = $name;
+                    $listen([$this->name[0], ...$names]);
+                }
+            }
+        }
     }
 }

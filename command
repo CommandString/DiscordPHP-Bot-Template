@@ -1,6 +1,6 @@
 <?php
 
-use Discord\Bot\Config;
+use Discord\Bot\Env;
 use Discord\Discord;
 use React\EventLoop\Loop;
 
@@ -18,17 +18,17 @@ if (!in_array($action, ["save", "delete"])) {
     throw new Exception("$action is an invalid action, you can only save and delete commands!");
 }
 
-$config = Config::get();
+$env = Env::get();
 
-$config->discord = new Discord([
-    "token" => $config->token
+$env->discord = new Discord([
+    "token" => $env->token
 ]);
 
-$config->discord->on("ready", function () use ($argv, $action) {
+$env->discord->on("ready", function () use ($argv, $action) {
     /**
      * @var \Discord\Discord
      */
-    $discord = Config::get()->discord;
+    $discord = Env::get()->discord;
     
 
     if ($action === "delete" && $argv[2] === "all") {
@@ -45,10 +45,6 @@ $config->discord->on("ready", function () use ($argv, $action) {
                 }
             });
         }
-    
-        Loop::addTimer(30, function () {
-            Config::get()->discord->close();
-        });
     } else {
         foreach ($argv as $command) {
             $command_class = "Discord\\Bot\\Commands\\$command";
@@ -61,11 +57,7 @@ $config->discord->on("ready", function () use ($argv, $action) {
         
             echo "\nA request for command $command to be {$action}d was sent!\n\n";
         }
-    
-        Loop::addTimer(30, function () {
-            Config::get()->discord->close();
-        });
     }
 });
 
-$config->discord->run();
+$env->discord->run();

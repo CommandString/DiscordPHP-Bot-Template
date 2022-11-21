@@ -2,7 +2,7 @@
 
 namespace Discord\Bot\Events;
 
-use Discord\Bot\Config;
+use Discord\Bot\Env;
 
 abstract class Template {
     /**
@@ -40,11 +40,11 @@ abstract class Template {
     public function listen(): void
     {
         if ($this->runOnce) {
-            Config::get()->discord->once($this->event, function (mixed ...$args) {
+            Env::get()->discord->once($this->event, function (mixed ...$args) {
                 $this->handler(...$args);
             });
         } else {
-            Config::get()->discord->on($this->event, function (mixed ...$args) {
+            Env::get()->discord->on($this->event, function (mixed ...$args) {
                 $this->handler(...$args);
             });
         }

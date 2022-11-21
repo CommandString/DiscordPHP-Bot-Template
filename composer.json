@@ -1,7 +1,6 @@
 {
     "require": {
-        "team-reflex/discord-php": "^7.3",
-        "react/event-loop": "^1.3"
+        "team-reflex/discord-php": "dev-master"
     },
     "autoload": {
         "psr-4": {
