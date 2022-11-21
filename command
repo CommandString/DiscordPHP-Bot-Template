@@ -21,7 +21,7 @@ if (!in_array($action, ["save", "delete"])) {
 $env = Env::get();
 
 $env->discord = new Discord([
-    "token" => $config->token
+    "token" => $env->token
 ]);
 
 $env->discord->on("ready", function () use ($argv, $action) {
