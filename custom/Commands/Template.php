@@ -143,7 +143,7 @@ abstract class Template {
                     $this->autocomplete($interaction);
                 });
             } catch (\LogicException $e) {
-                echo "Warning caught: {$e->getMessage()}\nIf this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)";
+                echo "Warning caught: {$e->getMessage()}\nIf this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)\n";
             }
         };
 
