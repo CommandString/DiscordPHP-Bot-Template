@@ -78,13 +78,11 @@ class Randomize extends Template {
         }
 
         if (!$direction) {
-            $backwardsRandomizedText = "";
             $randomizedLetters = str_split($randomizedText);
+            $randomizedText = "";
             for ($i = count($randomizedLetters)-1; $i >= 0; $i--) {
-                $backwardsRandomizedText .= $randomizedLetters[$i];
+                $randomizedText .= $randomizedLetters[$i];
             }
-
-            $randomizedText = $backwardsRandomizedText;
         }
         
         return $randomizedText;
