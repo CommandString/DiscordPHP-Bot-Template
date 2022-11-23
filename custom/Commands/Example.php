@@ -1,6 +1,6 @@
 <?php
 
-namespace Discord\Bot\Commands\Examples;
+namespace Discord\Bot\Commands;
 
 use Discord\Bot\Commands\Template;
 use Discord\Builders\CommandBuilder;
