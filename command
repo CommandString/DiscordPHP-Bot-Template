@@ -1,63 +1,109 @@
 <?php
 
-use Discord\Bot\Env;
-use Discord\Discord;
-use React\EventLoop\Loop;
+$outputFile = "command.output.txt";
+$errorFile = "command.error.txt";
 
-require_once "./vendor/autoload.php";
+$command = "php";
 
-if (!isset($argv[2])) {
-    throw new Exception("The command must have the an action with a command name appending it.");
+foreach ($argv as $arg) {
+    if ($arg === "command") {
+        $arg = "command.php";
+    }
+
+    $command .= " $arg";
 }
 
-$action = strtolower($argv[1]);
+$dspec = [
+    // 0 => ["file", "command.php", "r"],
+    1 => ["file", $outputFile, "a"],
+    2 => ["file", $errorFile, "a"]
+];
 
-unset($argv[0], $argv[1]);
+# delete any existing output files before starting process
 
-if (!in_array($action, ["save", "delete"])) {
-    throw new Exception("$action is an invalid action, you can only save and delete commands!");
+if (file_exists($outputFile)) {
+    unlink($outputFile);
 }
 
-$env = Env::get();
+if (file_exists($errorFile)) {
+    unlink($errorFile);
+}
 
-$env->discord = new Discord([
-    "token" => $env->token
-]);
+$process = proc_open($command, $dspec, $pipes, realpath("./"));
 
-$env->discord->on("ready", function () use ($argv, $action) {
-    /**
-     * @var \Discord\Discord
-     */
-    $discord = Env::get()->discord;
-    
+$success = $stop = $exception = false;
 
-    if ($action === "delete" && $argv[2] === "all") {
-        $discord->application->commands->freshen()->done(function ($results) use ($discord) {
-            foreach ($results as $command) {
-                $discord->application->commands->delete($command);
-            }
-        });
+$currentOutputLine = 0;
+$currentErrorLine = 0;
+$currentCommand = "";
 
-        foreach ($discord->guilds as $guild) {
-            $guild->commands->freshen()->done(function ($results) use ($guild) {
-                foreach ($results as $command) {
-                    $guild->commands->delete($command);
-                }
-            });
+while(true) {
+    $lines = explode("\n", file_get_contents($outputFile));
+
+    for ($i = $currentOutputLine; $i < count($lines); $i++) {
+        $line = $lines[$i];
+
+        if (str_starts_with($line, "Command: ")) {
+            $currentCommand = $line;
         }
-    } else {
-        foreach ($argv as $command) {
-            $command_class = "Discord\\Bot\\Commands\\$command";
-        
-            if (!class_exists($command_class)) {
-                throw new Exception("Command $command cannot be found!");
-            }
 
-            (new $command_class)->$action();
-        
-            echo "\nA request for command $command to be {$action}d was sent!\n\n";
+        if (str_contains($line, "REQ")) {
+            if (str_contains($line, "/commands successful")) {
+                $success = $stop = true;
+                break;
+            } else if (str_contains($line, "/commands failed")) {
+                $stop = true;
+                break;
+            }
+        } else if (str_contains($line, "Stack trace")) {
+            $exception = true;
+            $stop = true;
+            break;
         }
     }
-});
+    
+    $currentOutputLine = $i;
 
-$env->discord->run();
+    if ($stop) {
+        break;
+    }
+    
+    $lines = explode("\n", file_get_contents($errorFile));
+
+    for ($i = $currentErrorLine; $i < count($lines); $i++) {
+        $line = $lines[$i];
+
+        if (str_contains($line, "Stack trace")) {
+            $exception = true;
+            $stop = true;
+            break;
+        }
+    }
+    
+    $currentErrorLine = $i;
+
+    if ($stop) {
+        break;
+    }
+
+    sleep(1);
+}
+
+proc_terminate($process);
+
+function getCharactersBetween(string $startCharacter, string $endCharacter, string $string, bool $case_sensitive = true) {
+    $start = ($case_sensitive) ? strpos($string, $startCharacter) : stripos($string, $startCharacter);
+    $end = ($case_sensitive) ? strrpos($string, $endCharacter) : strripos($string, $endCharacter);
+    
+    return substr($string, $start, ($end-$start)+1);
+}
+
+if ($success) {
+    echo "Command Operation was successful!\n";
+    unlink($outputFile);
+    unlink($errorFile);
+} else {
+    echo "Command Operator was unsuccessful see errors below\n";
+    echo "$currentCommand\n";
+    echo (!$exception) ? json_encode(json_decode(getCharactersBetween("{", "}", explode("Stack trace:", $line)[0])), JSON_PRETTY_PRINT)."\n" : file_get_contents($errorFile);
+}
