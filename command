@@ -103,7 +103,7 @@ if ($success) {
     unlink($outputFile);
     unlink($errorFile);
 } else {
-    echo "Command Operator was unsuccessful see errors below\n";
+    echo "Command Operation was unsuccessful see errors below\n";
     echo "$currentCommand\n";
     echo (!$exception) ? json_encode(json_decode(getCharactersBetween("{", "}", explode("Stack trace:", $line)[0])), JSON_PRETTY_PRINT)."\n" : file_get_contents($errorFile);
 }
