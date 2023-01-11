@@ -206,8 +206,8 @@ public function handler(Discord $discord = null): void
     $env->commands = [
         Commands\Ping::class,
         Commands\Profile::class,
-        Commands\BaseCommand::class;
-	    Commands\SubCommand::class
+        Commands\BaseCommand::class,
+        Commands\SubCommand::class
         // ...
     ];
 }
