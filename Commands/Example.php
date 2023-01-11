@@ -15,6 +15,11 @@ class Example extends Template {
         
     }
 
+    public static function autocomplete(Interaction $interaction): void
+    {
+        
+    }
+
     public static function getConfig(): CommandBuilder|array
     {
         return (new CommandBuilder)
