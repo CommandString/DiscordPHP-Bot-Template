@@ -1,10 +1,14 @@
 {
     "require": {
-        "team-reflex/discord-php": "dev-master"
+        "team-reflex/discord-php": "dev-master",
+        "commandstring/env": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "Discord\\Bot\\": "custom/"
+            "Classes\\": "./Classes/",
+            "Commands\\": "./Commands/",
+            "Events\\": "./Events/",
+            "Interactions\\": "./Interactions/"
         }
     }
 }

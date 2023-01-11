@@ -4,18 +4,17 @@
 # |     \ |_____] |_____| |_____]      |_____] |     |    |            |    |______ |  |  | |_____] |      |_____|    |    |______
 # |_____/ |       |     | |            |_____] |_____|    |            |    |______ |  |  | |       |_____ |     |    |    |______
 
-use Discord\Bot\Env;
-use Discord\Bot\Events\ready;
+use CommandString\Env\Env;
 use Discord\Discord;
 use Discord\WebSockets\Intents;
 
-require_once "./vendor/autoload.php";
+require_once __DIR__."/vendor/autoload.php";
 
 # _______ __   _ _    _ _____  ______  _____  __   _ _______ _______ __   _ _______
 # |______ | \  |  \  /    |   |_____/ |     | | \  | |  |  | |______ | \  |    |   
 # |______ |  \_|   \/   __|__ |    \_ |_____| |  \_| |  |  | |______ |  \_|    |   
 
-$env = new Env();
+$env = Env::createFromJsonFile("./env.json");
 
 # ______  _____ _______ _______  _____   ______ ______ 
 # |     \   |   |______ |       |     | |_____/ |     \
@@ -27,11 +26,25 @@ $env->discord = new Discord([
     "intents" => Intents::getAllIntents()
 ]);
 
+# _______  _____  _______ _______ _______ __   _ ______  _______
+# |       |     | |  |  | |  |  | |_____| | \  | |     \ |______
+# |_____  |_____| |  |  | |  |  | |     | |  \_| |_____/ ______|
+
+$env->commands = [
+    Commands\Ping::class
+];
+
 # _______ _    _ _______ __   _ _______ _______
 # |______  \  /  |______ | \  |    |    |______
 # |______   \/   |______ |  \_|    |    ______|
 
-(new ready)->listen();
+$env->events = [
+    Events\Ready::class
+];
+
+foreach ($env->events as $event) {
+    $event::listen();
+}
 
 #  ______ _     _ __   _
 # |_____/ |     | | \  |

@@ -1,5 +1,4 @@
 /vendor/*
 env.json
-composer.lock
 command.output.txt
 command.error.txt

@@ -11,7 +11,7 @@ This repo is a boiler plate for discord bots made in PHP :)
 *Only ask questions relevant to using DiscordPHP's own wrapper, not on how to use this.*
 
 # Environment Configuration #
-1. `php index.php` an exception should be thrown asking you configure `env.json`.
+1. Copy `env.example.json` to `env.json`.
 2. Open `env.json` and add your bot token, you can also add additional environment variables that pertain to your bot. Such as mysql credentials.
 
 ### Retrieving Environment Variables ###
@@ -24,58 +24,32 @@ Env::get()->variableName;
 Env::get()->variableName = "value";
 ```
 
-### Important Notes About Environment Variables ###
-* Environment variables are treated similarly to readonly properties
+*You can read more at [CommandString/Env](https://github.com/commandstring/env)*
+
+**NOTE: Environment variables are readonly properties**
 
 # Events #
 ### Creating Events ###
-1. Create a new PHP script inside `custom/Events/` named after the name of your event. Then copy the code below into it
-	```php
-	<?php
-
-	namespace Discord\Bot\Events;
-
-	use Discord\Discord;
-	use Discord\WebSockets\Event;
-
-	/**
-	 * @inheritDoc Template
-	 */
-	class EVENT_NAME extends Template {
-	    public function handler(): void
-	    {
-	    }
-	  
-	    public function getEvent(): string
-	    {
-	        return EVENT::EVENT_NAME;
-	    }
-
-	    public function runOnce(): bool
-	    {
-	        return false;
-	    }
-	}
-	```
-3. replace `EVENT_NAME` with the name of your event
-4. Insert the code you'd like to run when that event is triggered into the handler method. When defining arguments that are passed into the event handler make sure to set their default value to null. *This is due to how extending abstract classes work as you cannot have required arguments that aren't defined in the parent class.*
-5. If you want your event handler to only run once then change the return from `false` to `true` in the `runOnce` method
+1. Copy `Events/Example.php` to `Events/NameOfYourEvent.php`
+2. Replace `Event::MESSAGE_CREATE` with the name of your event
+3. Insert the code you'd like to run when that event is triggered into the handler method. When defining arguments that are passed into the event handler make sure to set their default value to null. *This is due to how extending abstract classes work as you cannot have required arguments that aren't defined in the parent class.*
+4. If you want your event handler to only run once then change the `$runOnce` property to `true`
 
 After following the steps above you should be left with something that looks like this.
 ```php
 <?php
 
-namespace Discord\Bot\Events;
+namespace Events;
 
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
 
-/**
- * @inheritDoc Template
- */
 class MESSAGE_CREATE extends Template {
-    public function handler(Message $message = null, Discord $discord = null): void
+    protected static string $event = Event::MESSAGE_CREATE;
+    protected static bool $runOnce = false;
+
+    public static function handler(Message $message = null, Discord $discord = null): void
     {
         if ($message->author->bot) {
             return;
@@ -83,32 +57,24 @@ class MESSAGE_CREATE extends Template {
 
         $message->reply("Well I can't read what you said but I'm glad you said something :)");
     }
-  
-    public function getEvent(): string
-    {
-        return Event::MESSAGE_CREATE;
-    }
-
-    public function runOnce(): bool
-    {
-        return false;
-    }
 }
 ```
 
 ### Listening for Events ###
-Inside `index.php`, instantiate an anonymous class and invoke it's `listen` method
+Inside `index.php`, add the class name to the `$env->events` array like so...
 ```php
-use Discord\Bot\Events\MESSAGE_CREATE;
 // ...
-(new MESSAGE_CREATE)->listen();
+$env->events = [
+    Events\Ready::class, // DO NOT REMOVE THIS EVENT!
+    Events\MESSAGE_CREATE::class
+];
 // ...
 ```
 
 # Slash Commands #
 
 ### Creating Commands ###
-1. Copy `custom/Commands/Examples/Example.php` to where you want it and name it after the name of your command; For example I'd copy it to `custom/Commands/Examples/Ping.php`
+1. Copy `Commands/Example.php` to `Commands/NameOfYourCommand.php`.
 2. Replace `Example` with your command name (for subcommands check [Additional notes for subcommands](#additional-notes-for-subcommands)) and `Example Command` with the description of your command. 
 3. Add the code that will be invoked inside your `handler` method and add any additional command configuration required into the `getConfig` method. *Advance users can also return an array rather than using the CommandBuilder*.
 4. *If your command has autocomplete enabled then put the code relevant to that inside the autocomplete method*
@@ -117,41 +83,30 @@ After completing the steps above you should be left with something similar to...
 ```php
 <?php
 
-namespace Discord\Bot\Commands\Examples;
+namespace Commands;
 
-use Discord\Bot\Commands\Template;
+use Commands\Template;
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 
 class Ping extends Template {
-    public function handler(Interaction $interaction): void
+    public static function handler(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong :ping_pong:'));
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong :ping_pong:'), true);
     }
 
-    public function autocomplete(Interaction $interaction): void
-    {
-        
-    }
-
-    public function getName(): string
+    public static function getName(): string
     {
         return "ping";
     }
 
-    public function getConfig(): CommandBuilder
+    public static function getConfig(): CommandBuilder|array
     {
         return (new CommandBuilder)
-            ->setName($this->getName())
+            ->setName(self::getName())
             ->setDescription("Ping the bot")
-            ->setDefaultMemberPermissions(0)
         ;
-    }
-
-    public function getGuild(): string
-    {
-        return "";
     }
 }
 ```
@@ -162,7 +117,7 @@ If you're command has subcommands change your `getName()` method to look more li
 
 ```php
 // ...
-	public function getName(): array
+	public static function getName(): array
 	{
 		return ["baseCommandName", ["subCommandName"], ["secondSubCommandName"]]
 	}
@@ -178,14 +133,12 @@ You will also need to modify your `getConfig()` method to look like...
 
 ```php
 // ...
-	public function getConfig(): CommandBuilder
+	public static function getConfig(): CommandBuilder
     {
         return (new CommandBuilder)
-            ->setName($this->getName()[0]) // <-- gets base command name
+            ->setName(self::getName()[0]) // <-- gets base command name
             // rest of the config can stay the same
 ```
-
-**An example of this can be found in `custom/Commands/Examples/Randomize.php`**
 
 ### Want different handlers for each subcommand?
 
@@ -198,7 +151,7 @@ Do not include the subcommand name in the base command class instead create anot
 You can also change the `getConfig()` method to...
 
 ```php
-	public function getConfig(): array
+	public static function getConfig(): array
 	{
 		return [];
 	}
@@ -212,15 +165,11 @@ Warning caught: The command `{insert your baseCommandName here}` already exists.
 If this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)
 ```
 
-**An example can be found in `custom/Commands/Examples/Up.php`**
-
 ### Adding & Updating Commands in Your Application ###
 
 You can use the PHP script below to add a command to your application or update an existing one.
 
 `php command save commandName`
-
-*You can list as many commands as you'd like after the action*
 
 ### Deleting Commands From Your Application ###
 
@@ -228,30 +177,27 @@ Similar to adding and updating commands to your application you can just swap sa
 
 `php command delete commandName`
 
-*Multiple command names can be specified here as well*
-
 ### Deleting All Commands From Your Application ###
 
 `php command delete all`
 
 ### Using command for commands in a subdirectory?
 
-If your command's path, for example, is `custom/Commands/Admin/Ban.php` instead of doing `php action Ban` you would do `php action Admin\\Ban`
+If your command's path, for example, is `Commands/Admin/Ban.php` instead of doing `php action Ban` you would do `php action Admin\\Ban`
 
-*Note the namespace in Ban.php would have to be `Discord\Bot\Commands\Admin` to work!*
+*Note the namespace in Ban.php would have to be `Commands\Admin` to work!*
 
 ### Listening for Commands ###
 
-Inside the already created `ready event` handler, `custom/Events/ready.php`, create an anonymous class for your command and invoke it's `listen` method.
+In `index.php` there is environment variable `commands` that's an array. Add the class name of your command like so...
 
-```php 
-use Discord\Bot\Commands\Ping;
+```php
 // ...
-public function handler(Discord $discord = null): void
-{
-    (new Ping)->listen();
-}
-// ...
+$env->commands = [
+    Commands\Ping::class,
+    Commands\Profile::class,
+    // ...
+];
 ```
 
 **SPECIAL NOTE: If you have a subcommand that has a different handler than the base command make sure you add it's listener second, for example**
@@ -259,12 +205,17 @@ public function handler(Discord $discord = null): void
 ```php
 public function handler(Discord $discord = null): void
 {	
-    (new BaseCommand)->listen();
-	(new SubCommand)->listen();
+    $env->commands = [
+        Commands\Ping::class,
+        Commands\Profile::class,
+        Commands\BaseCommand::class;
+	    Commands\SubCommand::class
+        // ...
+    ];
 }
 ```
 
-*If you do not do this the SubCommand's handler will be used for the baseCommand!!*
+**If you do not do this the SubCommand's handler will be used for the baseCommand!!**
 
 # Need additional assistance?
 

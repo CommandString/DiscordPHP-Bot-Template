@@ -1,109 +1,57 @@
 <?php
 
-$outputFile = "command.output.txt";
-$errorFile = "command.error.txt";
+require_once "vendor/autoload.php";
 
-$command = "php";
+use CommandString\Utils\ArrayUtils;
+use CommandString\Utils\StringUtils;
 
-foreach ($argv as $arg) {
-    if ($arg === "command") {
-        $arg = "command.php";
-    }
+$command = "php command.php {$argv[1]} {$argv[2]}";
 
-    $command .= " $arg";
-}
+$verbs = ["save" => "saving", "delete" => "deleting"];
+$present_tense_verb = $verbs[$argv[1]];
 
-$dspec = [
-    // 0 => ["file", "command.php", "r"],
-    1 => ["file", $outputFile, "a"],
-    2 => ["file", $errorFile, "a"]
-];
+$pipes = [];
+$proc = proc_open($command, [["pipe", "r"], ["pipe", "w"], ["pipe", "w"]], $pipes);
 
-# delete any existing output files before starting process
+stream_set_blocking($pipes[1], false);
 
-if (file_exists($outputFile)) {
-    unlink($outputFile);
-}
+$command = new stdClass;
 
-if (file_exists($errorFile)) {
-    unlink($errorFile);
-}
+while (proc_get_status($proc)["running"]) { // while attempting an action on a slash command
+    try {
+        while (!feof($pipes[1])) { // while there's still content in the pipe
+            $line = fgets($pipes[1]); // store the current line in $line
 
-$process = proc_open($command, $dspec, $pipes, realpath("./"));
-
-$success = $stop = $exception = false;
-
-$currentOutputLine = 0;
-$currentErrorLine = 0;
-$currentCommand = "";
-
-while(true) {
-    $lines = explode("\n", file_get_contents($outputFile));
-
-    for ($i = $currentOutputLine; $i < count($lines); $i++) {
-        $line = $lines[$i];
-
-        if (str_starts_with($line, "Command: ")) {
-            $currentCommand = $line;
-        }
-
-        if (str_contains($line, "REQ")) {
-            if (str_contains($line, "/commands successful")) {
-                $success = $stop = true;
-                break;
-            } else if (str_contains($line, "/commands failed")) {
-                $stop = true;
-                break;
+            if (json_decode($line) !== null) { // if the current line is a JSON
+                $command = json_decode($line); // decode it and store it in $command as an object
+                echo ucfirst($present_tense_verb) . " ". strtolower($command->command)." command : "; // get the present_tense_verb of the action (e.g. save is Saving)
+                continue;
             }
-        } else if (str_contains($line, "Stack trace")) {
-            $exception = true;
-            $stop = true;
-            break;
+
+            if (str_contains($line, "REQ")) {
+                if (str_contains($line, "/commands successful")) { // if action was successful
+                    echo "Success\n"; // output Success
+
+                    if (strtolower($command->command) === strtolower(ArrayUtils::getLastItem($argv))) { // if this is the last command that needs acted upon
+                        fclose($pipes[1]); // close the STDOUT pipe so that an error is thrown
+                        proc_terminate($proc, 9); // terminate the process as well
+                    }
+                } else if (str_contains($line, "/commands failed")) { // if the action failed
+                    echo "Fail\n"; // output Fail
+                    echo json_encode(json_decode(StringUtils::getBetween("{", "} in", $line, true)), JSON_PRETTY_PRINT); // output a prettified JSON of the error
+                
+                    if (strtolower($command->command) === strtolower(ArrayUtils::getLastItem($argv))) { // if this is the last command that needs acted upon
+                        fclose($pipes[1]); // close the STDOUT pipe so that an error is thrown
+                        proc_terminate($proc, 9); // terminate the process as well
+                    }
+                }
+            }
         }
+    } catch (TypeError) { // catch the error thrown on line 49 (hopefully)
+        die(); // just die...
     }
     
-    $currentOutputLine = $i;
-
-    if ($stop) {
-        break;
+    while (!feof($pipes[2])) { // while there's still content in the error pipe
+        echo fgets($pipes[2]); // dump contents of the error pipe
     }
-    
-    $lines = explode("\n", file_get_contents($errorFile));
-
-    for ($i = $currentErrorLine; $i < count($lines); $i++) {
-        $line = $lines[$i];
-
-        if (str_contains($line, "Stack trace")) {
-            $exception = true;
-            $stop = true;
-            break;
-        }
-    }
-    
-    $currentErrorLine = $i;
-
-    if ($stop) {
-        break;
-    }
-
-    sleep(1);
-}
-
-proc_terminate($process);
-
-function getCharactersBetween(string $startCharacter, string $endCharacter, string $string, bool $case_sensitive = true) {
-    $start = ($case_sensitive) ? strpos($string, $startCharacter) : stripos($string, $startCharacter);
-    $end = ($case_sensitive) ? strrpos($string, $endCharacter) : strripos($string, $endCharacter);
-    
-    return substr($string, $start, ($end-$start)+1);
-}
-
-if ($success) {
-    echo "Command Operation was successful!\n";
-    unlink($outputFile);
-    unlink($errorFile);
-} else {
-    echo "Command Operation was unsuccessful see errors below\n";
-    echo "$currentCommand\n";
-    echo (!$exception) ? json_encode(json_decode(getCharactersBetween("{", "}", explode("Stack trace:", $line)[0])), JSON_PRETTY_PRINT)."\n" : file_get_contents($errorFile);
 }

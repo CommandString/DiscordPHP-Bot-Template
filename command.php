@@ -1,6 +1,6 @@
 <?php
 
-use Discord\Bot\Env;
+use CommandString\Env\Env;
 use Discord\Discord;
 
 require_once "./vendor/autoload.php";
@@ -17,7 +17,7 @@ if (!in_array($action, ["save", "delete"])) {
     throw new Exception("$action is an invalid action, you can only save and delete commands!");
 }
 
-$env = Env::get();
+$env = Env::createFromJsonFile("./env.json");
 
 $env->discord = new Discord([
     "token" => $env->token
@@ -45,22 +45,21 @@ $env->discord->on("ready", function () use ($argv, $action) {
         }
     } else {
         foreach ($argv as $command) {
-            $command_class = "Discord\\Bot\\Commands\\$command";
+            $command = "Commands\\$command";
         
-            if (!class_exists($command_class)) {
+            if (!class_exists($command)) {
                 throw new Exception("Command $command cannot be found!");
             }
 
-            $command = (new $command_class);
-            $commandName = $command->name;
+            $commandName = $command::getName();
 
             if (is_array($commandName)) {
                 $commandName = $commandName[0];
             }
 
-            echo "\nCommand: [$commandName] | Action: [$action]\n\n";
+            echo json_encode(["command" => $commandName, "action" => $action]).PHP_EOL;
 
-            $command->$action();
+            $command::$action();
         }
     }
 });
