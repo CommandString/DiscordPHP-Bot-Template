@@ -42,8 +42,17 @@ $env->events = [
     Events\Ready::class
 ];
 
-foreach ($env->events as $event) {
-    $event::listen();
+# _____ __   _ _______ _______  ______ _______ _______ _______ _____  _____  __   _ _______
+#   |   | \  |    |    |______ |_____/ |_____| |          |      |   |     | | \  | |______
+# __|__ |  \_|    |    |______ |    \_ |     | |_____     |    __|__ |_____| |  \_| ______|
+
+$env->interactions = [
+    Interactions\Ping::class,
+    Interactions\Pong::class
+];
+
+foreach (array_merge($env->events, $env->interactions) as $listen) {
+    $listen::listen();
 }
 
 #  ______ _     _ __   _
