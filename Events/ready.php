@@ -20,5 +20,9 @@ class ready extends Template {
         foreach (Env::get("events") as $event) {
             echo "Listening for event: \"$event\"\n";
         }
+        
+        foreach (Env::get("interactions") as $interaction) {
+            echo "Listening for interaction: \"$interaction\"\n";
+        }
     }
 }
