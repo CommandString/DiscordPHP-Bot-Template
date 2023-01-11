@@ -13,6 +13,16 @@ abstract class Template {
      */
     abstract public static function handler(): void;
 
+    public static function getEvent(): string
+    {
+        return static::$event;
+    }
+
+    public static function runOnce(): bool
+    {
+        return static::$runOnce;
+    }
+
     public static function listen(): void
     {
         $function = function (mixed...$args) {

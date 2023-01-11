@@ -28,6 +28,16 @@ abstract class Template {
     {
         
     }
+
+    public static function getGuild(): string
+    {
+        return static::$guild;
+    }
+
+    public static function getName(): string|array
+    {
+        return static::$name;
+    }
     
     /**
      * @return CommandBuilder

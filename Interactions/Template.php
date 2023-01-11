@@ -9,6 +9,7 @@ use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 
 abstract class Template {
+    protected static string $id = "";
     protected static bool $runOnce = false;
 
     abstract public static function handler(Interaction $interaction, Discord $discord);
@@ -28,5 +29,10 @@ abstract class Template {
         } else {
             Env::get()->discord->on(Event::INTERACTION_CREATE, $handler);
         }
+    }
+
+    public static function getId(): string
+    {
+        return static::$id;
     }
 }
