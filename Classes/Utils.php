@@ -13,8 +13,6 @@ use Discord\Parts\User\Member;
 
 class Utils
 {
-    public const MESSAGE_VERIFICATION = 0;
-
     public static function newOption(string $name = "", string $description = ""): Option
     {
         $option = self::newPartDiscord(Option::class);
@@ -58,22 +56,6 @@ class Utils
         ]);
     }
 
-    public static function getPrebuiltMessage(int $id): ?MessageBuilder
-    {
-        switch ($id) {
-            case self::MESSAGE_VERIFICATION:
-                return MessageBuilder::new()
-                    ->addEmbed(self::newPartDiscord(Embed::class)
-                        ->setTitle("Verification")
-                        ->setDescription("Click the button below to get access to the rest of the server, be sure to read the rules!")
-                    )
-                    ->addComponent((new ActionRow())->addComponent((new Button(Button::STYLE_SUCCESS, "Example"))->setLabel("Click to verify")))
-                ;
-        }
-
-        return null;
-    }
-
     public static function buildActionRowWithButtons(Button ...$buttons): ActionRow
     {
         $actionRow = new ActionRow();
@@ -88,18 +70,5 @@ class Utils
     public static function newButton(int $style, string $label, ?string $custom_id = null): Button
     {
         return (new Button($style, $custom_id))->setLabel($label);
-    }
-
-    public static function isMod(Member $member): bool
-    {
-        $modRoles = [Env::get("modRole")->id, Env::get("sudoRole")->id];
-
-        foreach ($member->roles as $role) {
-            if (in_array($role->id, $modRoles)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
