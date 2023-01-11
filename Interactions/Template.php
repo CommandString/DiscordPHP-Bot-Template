@@ -17,7 +17,7 @@ abstract class Template {
 
     final public static function listen(): void
     {
-        if (empty($listen)) {
+        if (empty(self::$listen)) {
             $handler = function (Interaction $interaction, Discord $discord) {
                 if (!isset(static::$id)) {
                     return;
@@ -25,19 +25,21 @@ abstract class Template {
 
                 $parts = explode("|", $interaction->data->custom_id);
 
-                if ($parts[0] === static::$id) {
-                    static::handler($interaction, $discord);
+                if (isset(self::$listen[$parts[0]])) {
+                    $class = self::$listen[$parts[0]];
+
+                    $class::handler($interaction, $discord);
+
+                    if ($class::$runOnce) {
+                        unset(self::$listen[$parts[0]]);
+                    }
                 }
             };
 
-            if (static::$runOnce) {
-                Env::get()->discord->once(Event::INTERACTION_CREATE, $handler);
-            } else {
-                Env::get()->discord->on(Event::INTERACTION_CREATE, $handler);
-            }
+            Env::get()->discord->on(Event::INTERACTION_CREATE, $handler);
         }
 
-        $listen[] = static::$id;
+        self::$listen[static::$id] = static::class;
     }
 
     public static function getId(): string
