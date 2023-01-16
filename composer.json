@@ -5,10 +5,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Classes\\": "./Classes/",
+            "Common\\": "./Common/",
             "Commands\\": "./Commands/",
             "Events\\": "./Events/",
             "Interactions\\": "./Interactions/"
-        }
+        },
+        "files": [
+            "./Common/Helpers.php"
+        ]
     }
 }
