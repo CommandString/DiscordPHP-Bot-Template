@@ -280,6 +280,15 @@ $env->interactions = [
 ];
 ```
 
+# Using the example
+`composer install`
+`cp env.example.json env.json` (copy env.example.json to env.json)
+Put token in env.json
+`php command save Ping`
+`php index.php`
+
+**NOTE: I have all intents enabled by default you can change them in index.php**
+
 # Need additional assistance?
 
 I've created a discord server that you can join if you have any trouble setting up this template!
