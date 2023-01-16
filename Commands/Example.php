@@ -8,7 +8,7 @@ use Discord\Parts\Interactions\Interaction;
 
 class Example extends Template {
     protected static string $guild = "";
-    protected static string $name = "Example";
+    protected static array|string $name = "Example";
     
     public static function handler(Interaction $interaction): void
     {
