@@ -1,7 +1,22 @@
 
 # DiscordPHP Bot Template
 
-This repo is a boiler plate for discord bots made in PHP :)
+The unofficial DiscordPHP Bot boilerplate
+
+# Table of contents
+[Important Resources](#important-resources)
+
+[Environment Configuration](#environment-configuration)
+
+[Events](#events)
+
+[Slash Commands](#slash-commands)
+
+[Interactions](#interactions)
+
+[Using example](#using-the-example)
+
+[Need Assistance](#need-additional-assistance)
 
 # Important Resources #
 
