@@ -11,16 +11,18 @@ use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 
 class Ping extends Template {
-    protected static string|array $name = "ping";
+    protected static string|array $name = "pong";
 
     public static function handler(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent('pong :ping_pong:')->addComponent(self::getActionRow()), true);
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('Ping :ping_pong:')->addComponent(self::getActionRow(0, true)), true);
     }
 
-    public static function getActionRow(): ActionRow
+    public static function getActionRow(int $times, bool $ping): ActionRow
     {
-        return Utils::buildActionRowWithButtons(Utils::newButton(Button::STYLE_PRIMARY, "Ping", "Ping"), Utils::newButton(Button::STYLE_SECONDARY, "Pong", "Pong"));
+        $button = ($ping) ? Utils::newButton(Button::STYLE_PRIMARY, "Ping", "Ping|$times") : Utils::newButton(Button::STYLE_SECONDARY, "Pong", "Pong|$times");
+
+        return Utils::buildActionRowWithButtons($button);
     }
 
     public static function getConfig(): CommandBuilder|array
