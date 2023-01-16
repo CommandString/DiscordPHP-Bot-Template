@@ -251,6 +251,24 @@ class Pong extends Template {
 }
 ```
 
+### Storing data in the id
+
+If you need to store data in the id, separate the id and the data e.g. `Ping|5` make sure the id comes first. You can then access these by adding optional args after Discord $discord in the handler method. Also, args are passed in the same order as defined in the id.
+
+```php
+// ...
+public static function handler(Interaction $interaction, Discord $discord, int $timesPinged)
+// ...
+```
+
+You can have multiple columns of data if needed as well. e.g. `Ping|5|232224992908017664`
+
+```php
+// ...
+public static function handler(Interaction $interaction, Discord $discord, int $timesPinged, string $userid)
+// ...
+```
+
 ### Listening for interactions
 
 On `index.php` add the interaction classname to `$env->interactions` like so...
