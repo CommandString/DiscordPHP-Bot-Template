@@ -2,15 +2,15 @@
 
 namespace Commands;
 
-use Classes\Utils;
-use Commands\Template;
+use function Common\newButton;
+use function Common\buildActionRowWithButtons;
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 
-class Ping extends Template {
+class Ping extends BaseCommand {
     protected static string|array $name = "ping";
 
     public static function handler(Interaction $interaction): void
@@ -20,9 +20,9 @@ class Ping extends Template {
 
     public static function getActionRow(int $times, bool $ping): ActionRow
     {
-        $button = ($ping) ? Utils::newButton(Button::STYLE_PRIMARY, "Ping", "Ping|$times") : Utils::newButton(Button::STYLE_SECONDARY, "Pong", "Pong|$times");
+        $button = ($ping) ? newButton(Button::STYLE_PRIMARY, "Ping", "Ping|$times") : newButton(Button::STYLE_SECONDARY, "Pong", "Pong|$times");
 
-        return Utils::buildActionRowWithButtons($button);
+        return buildActionRowWithButtons($button);
     }
 
     public static function getConfig(): CommandBuilder|array

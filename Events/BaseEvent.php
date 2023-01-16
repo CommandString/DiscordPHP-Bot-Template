@@ -4,7 +4,7 @@ namespace Events;
 
 use CommandString\Env\Env;
 
-abstract class Template {
+abstract class BaseEvent {
     protected static string $event = "";
     protected static bool $runOnce = false;
 

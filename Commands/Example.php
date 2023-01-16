@@ -2,11 +2,10 @@
 
 namespace Commands;
 
-use Commands\Template;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
 
-class Example extends Template {
+class Example extends BaseCommand {
     protected static string $guild = "";
     protected static array|string $name = "Example";
     

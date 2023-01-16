@@ -7,7 +7,7 @@ use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 use Discord\Discord;
 
-class Ping extends Template {
+class Ping extends BaseInteraction {
     protected static string $id = "Ping";
 
     public static function handler(Interaction $interaction, Discord $discord, int $timesPinged = null)

@@ -8,7 +8,7 @@ use Discord\Parts\Interactions\Command\Command;
 use Discord\Parts\Interactions\Interaction;
 use Exception;
 
-abstract class Template {
+abstract class BaseCommand {
     protected static string $guild = "";
     protected static string|array $name = "";
 
