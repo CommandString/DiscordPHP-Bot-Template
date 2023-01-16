@@ -49,7 +49,7 @@ abstract class Template {
      */
     private static function isGuildCommand(): bool
     {
-        return (strlen(static::$guild) > 0);
+        return strlen(static::getGuild());
     }
 
     /**
@@ -69,7 +69,7 @@ abstract class Template {
                 throw new Exception("Command ".static::$name." isn't registered to the discord bot!");
             }
 
-            if (!$this->isGuildCommand()) {
+            if (!static::isGuildCommand()) {
                 $discord->application->commands->delete($command);
             } else {
                 $discord->guilds->get("id", static::$guild)->commands->delete($command);
