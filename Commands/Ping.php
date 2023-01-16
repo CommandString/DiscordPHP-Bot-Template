@@ -11,11 +11,11 @@ use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
 
 class Ping extends Template {
-    protected static string|array $name = "pong";
+    protected static string|array $name = "ping";
 
     public static function handler(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent('Ping :ping_pong:')->addComponent(self::getActionRow(0, true)), true);
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('Pong :ping_pong:')->addComponent(self::getActionRow(0, false)), true);
     }
 
     public static function getActionRow(int $times, bool $ping): ActionRow
