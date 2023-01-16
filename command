@@ -14,6 +14,7 @@ $pipes = [];
 $proc = proc_open($command, [["pipe", "r"], ["pipe", "w"], ["pipe", "w"]], $pipes);
 
 stream_set_blocking($pipes[1], false);
+stream_set_blocking($pipes[2], false);
 
 $command = new stdClass;
 
