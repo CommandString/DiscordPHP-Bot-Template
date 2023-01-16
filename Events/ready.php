@@ -5,24 +5,29 @@ namespace Events;
 use CommandString\Env\Env;
 use Discord\Discord;
 
-class ready extends Template {
+class ready extends BaseEvent {
     protected static string $event = "ready";
+
+    private const COMMANDS = 0;
+    private const EVENTS = 1;
+    private const INTERACTIONS = 2;
     
     public static function handler(Discord $discord = null): void
     {
         echo "\n{$discord->application->name} ready!\n\n";
 
-        foreach (Env::get("commands") as $command) {
-            echo "Listening for command: \"$command\"\n";
-            $command::listen();
-        }
-        
-        foreach (Env::get("events") as $event) {
-            echo "Listening for event: \"$event\"\n";
-        }
-        
-        foreach (Env::get("interactions") as $interaction) {
-            echo "Listening for interaction: \"$interaction\"\n";
+        $listened = [Env::get("commands"), Env::get("events"), Env::get("interactions")];
+
+        foreach ($listened as $type => $classes) {
+            $typeString = ($type === self::COMMANDS) ? "command" : (($type === self::EVENTS) ? "event" : (($type === self::INTERACTIONS) ? "interaction" : ""));
+
+            foreach ($classes as $class) {
+                if ($class !== self::class) {
+                    $class::listen();
+                }
+
+                echo "Listening for $typeString: \"$class\"\n";
+            }
         }
     }
 }

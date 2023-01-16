@@ -51,9 +51,7 @@ $env->interactions = [
     Interactions\Pong::class
 ];
 
-foreach (array_merge($env->events, $env->interactions) as $listen) {
-    $listen::listen();
-}
+Events\ready::listen();
 
 #  ______ _     _ __   _
 # |_____/ |     | | \  |
