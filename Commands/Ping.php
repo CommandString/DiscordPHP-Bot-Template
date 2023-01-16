@@ -2,13 +2,14 @@
 
 namespace Commands;
 
-use function Common\newButton;
-use function Common\buildActionRowWithButtons;
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Interactions\Interaction;
+
+use function Common\newButton;
+use function Common\buildActionRowWithButtons;
 
 class Ping extends BaseCommand {
     protected static string|array $name = "ping";
