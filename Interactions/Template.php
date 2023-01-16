@@ -27,8 +27,9 @@ abstract class Template {
 
                 if (isset(self::$listen[$parts[0]])) {
                     $class = self::$listen[$parts[0]];
+                    unset($parts[0]);
 
-                    $class::handler($interaction, $discord);
+                    $class::handler($interaction, $discord, ...$parts);
 
                     if ($class::$runOnce) {
                         unset(self::$listen[$parts[0]]);
