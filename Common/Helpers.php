@@ -6,46 +6,42 @@ use CommandString\Env\Env;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
+use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Attachment;
+use Discord\Parts\Interactions\Command\Choice;
 use Discord\Parts\Interactions\Command\Option;
+use Discord\Parts\Interactions\Interaction;
+use Discord\Parts\Interactions\Request\Option as RequestOption;
 
-function newOption(string $name = "", string $description = ""): Option
+function newOption(string $name, string $description, int $type, bool $required = false): Option
 {
-    $option = newPartDiscord(Option::class);
-
-    if (!empty($name)) {
-        $option->setName($name);
-    }
-
-    if (!empty($description)) {
-        $option->setDescription($description);
-    }
-
-    return $option;
+    return newPartDiscord(Option::class)
+        ->setName($name)
+        ->setDescription($description)
+        ->setType($type)
+        ->setRequired($required)
+    ;
 }
 
-function newPartDiscord(string $class): mixed
+function newChoice(string $name, float|int|string $value): Choice
 {
-    return (new $class(Env::get()->discord));
+    return newPartDiscord(Choice::class)
+        ->setName($name)
+        ->setValue($value)
+    ;
+}
+
+function newPartDiscord(string $class, mixed ...$args): mixed
+{
+    return (new $class(Env::get()->discord, ...$args));
 }
 
 function messageWithContent(string $content): MessageBuilder
 {
-    return MessageBuilder::new ()->setContent($content);
+    return MessageBuilder::new()->setContent($content);
 }
 
-function appendErrorLog(string...$lines)
-{
-    $errorLogLocation = realpath(__DIR__ . "/../../error.log");
-
-    $log = file_exists($errorLogLocation) ? file_get_contents($errorLogLocation) : "";
-
-    foreach ($lines as $line) {
-        file_put_contents($errorLogLocation, "$log" . PHP_EOL . "$line");
-    }
-}
-
-function uploadedFileAttachment(string $fileName): Attachment
+function createLocalFileAttachment(string $fileName): Attachment
 {
     return new Attachment(Env::get()->discord, [
         "filename" => $fileName
@@ -66,4 +62,25 @@ function buildActionRowWithButtons(Button ...$buttons): ActionRow
 function newButton(int $style, string $label, ?string $custom_id = null): Button
 {
     return (new Button($style, $custom_id))->setLabel($label);
+}
+
+function getOptionFromInteraction(Collection|Interaction $options, string ...$names): ?RequestOption
+{
+    if ($options instanceof Interaction) {
+        $options = $options->data->options;
+    }
+
+    foreach ($names as $key => $name) {
+        $option = $options->get("name", $name);
+
+        if ($key !== count($names)-1) {
+            $options = $option?->options;
+        }
+
+        if (is_null($options) || is_null($option)) {
+            break;
+        }
+    }
+
+    return $option;
 }
