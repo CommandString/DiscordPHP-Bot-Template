@@ -16,6 +16,8 @@ use \Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Throwable;
 
+use function React\Async\await;
+
 #[AsCommand(name: 'SlashCommands', description: 'Setup slash commands')]
 class SlashCommands extends Command
 {
@@ -38,7 +40,7 @@ class SlashCommands extends Command
             die();
         }
         
-        $verb = $verbs[$action];
+        $verb = ($action !== "deleteall") ? $verbs[$action] : null;
 
         $commands = $input->getArgument("slash-commands");
         
@@ -65,20 +67,20 @@ class SlashCommands extends Command
             $discord = Env::get()->discord;
             
             if ($action === 'deleteall') {
-                $discord->application->commands->freshen()->done(function ($results) use ($discord, $output) {
-                    foreach ($results as $command) {
-                        $output->writeln("<info>Deleting global command $command->name</info>");
-                        $discord->application->commands->delete($command);
-                    }
-                });
-        
+                $globalCommands = await($discord->application->commands->freshen());
+
+                foreach ($globalCommands as $command) {
+                    $output->writeln("<info>Deleting global command $command->name</info>");
+                    await($discord->application->commands->delete($command));
+                }
+
                 foreach ($discord->guilds as $guild) {
-                    $guild->commands->freshen()->done(function ($results) use ($guild, $output) {
-                        foreach ($results as $command) {
-                            $output->writeln("<info>Deleting command $command->name from guild $guild->name:$guild->id</info>");
-                            $guild->commands->delete($command);
-                        }
-                    });
+                    $guildCommands = await($guild->commands->freshen());
+
+                    foreach ($guildCommands as $command) {
+                        $output->writeln("<info>Deleting command $command->name from guild $guild->name:$guild->id</info>");
+                        await($guild->commands->delete($command));
+                    }
                 }
 
                 $discord->close(true);
