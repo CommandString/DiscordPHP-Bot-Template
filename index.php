@@ -6,7 +6,6 @@
 
 use CommandString\Env\Env;
 use Discord\Discord;
-use Discord\WebSockets\Intents;
 
 require_once __DIR__."/vendor/autoload.php";
 
