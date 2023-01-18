@@ -297,9 +297,13 @@ $env->interactions = [
 
 # Using the example
 `composer install`
+
 `php bot setup`
+
 Enter token
+
 `php bot save Ping`
+
 `php index.php`
 
 **NOTE: I have all intents enabled by default you can change them in index.php**
