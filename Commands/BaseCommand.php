@@ -7,6 +7,10 @@ use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command;
 use Discord\Parts\Interactions\Interaction;
 use Exception;
+use React\Promise\ExtendedPromiseInterface;
+use React\Promise\PromiseInterface;
+
+use function React\Async\await;
 
 abstract class BaseCommand {
     protected static string $guild = "";
@@ -55,38 +59,37 @@ abstract class BaseCommand {
     /**
      * @return void
      */
-    public static function delete(): void
+    public static function delete(): ExtendedPromiseInterface
     {
         /**
          * @var \Discord\Discord
          */
         $discord = Env::get()->discord;
-
-        $function = function ($commands) use ($discord) {
-            $command = $commands->get("name", static::$name);
-
-            if (is_null($command)) {
-                throw new Exception("Command ".static::$name." isn't registered to the discord bot!");
-            }
-
-            if (!static::isGuildCommand()) {
-                $discord->application->commands->delete($command);
-            } else {
-                $discord->guilds->get("id", static::$guild)->commands->delete($command);
-            }
-        };
+        $return = null;
 
         if (static::isGuildCommand()) {
-            $discord->guilds->get("id", static::$guild)->commands->freshen()->done($function);
+            $commands = await($discord->guilds->get("id", static::$guild)->commands->freshen());
         } else {        
-            $discord->application->commands->freshen()->done($function);
+            $commands = await($discord->application->commands->freshen());
+        }
+
+        $command = $commands->get("name", static::$name);
+
+        if (is_null($command)) {
+            throw new Exception("Command ".static::$name." isn't registered to the discord bot!");
+        }
+
+        if (!static::isGuildCommand()) {
+            return $discord->application->commands->delete($command);
+        } else {
+            return $discord->guilds->get("id", static::$guild)->commands->delete($command);
         }
     }
 
     /**
      * @return void
      */
-    public static function save(): void
+    public static function save(): ExtendedPromiseInterface
     {
         $config = static::getConfig();
 
@@ -102,9 +105,9 @@ abstract class BaseCommand {
         $discord = Env::get()->discord;
 
         if (static::isGuildCommand()) {
-            $discord->guilds[static::$guild]->commands->save($command);
+            return $discord->guilds[static::$guild]->commands->save($command);
         } else {
-            $discord->application->commands->save($command);
+            return $discord->application->commands->save($command);
         }
     }
 
