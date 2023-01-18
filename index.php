@@ -22,8 +22,6 @@ $env = Env::createFromJsonFile("./env.json");
 
 $env->discord = new Discord([
     "token" => $env->token,
-    "loadAllMembers" => true,
-    "intents" => Intents::getAllIntents()
 ]);
 
 # _______  _____  _______ _______ _______ __   _ ______  _______
