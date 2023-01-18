@@ -1,14 +1,16 @@
 {
     "require": {
         "team-reflex/discord-php": "dev-master",
-        "commandstring/env": "^1.0"
+        "commandstring/env": "^1.0",
+        "symfony/console": "^6.2"
     },
     "autoload": {
         "psr-4": {
             "Common\\": "./Common/",
             "Commands\\": "./Commands/",
             "Events\\": "./Events/",
-            "Interactions\\": "./Interactions/"
+            "Interactions\\": "./Interactions/",
+            "Console\\": "./Console"
         },
         "files": [
             "./Common/Helpers.php"
