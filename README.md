@@ -189,17 +189,17 @@ If this is about a command already existing for a command you're listening for t
 
 You can use the PHP script below to add a command to your application or update an existing one.
 
-`php command save commandName`
+`php bot save commandName`
 
 ### Deleting Commands From Your Application ###
 
 Similar to adding and updating commands to your application you can just swap save with delete.
 
-`php command delete commandName`
+`php bot delete commandName`
 
 ### Deleting All Commands From Your Application ###
 
-`php command delete all`
+`php bot delete all`
 
 ### Using command for commands in a subdirectory?
 
@@ -297,9 +297,9 @@ $env->interactions = [
 
 # Using the example
 `composer install`
-`cp env.example.json env.json` (copy env.example.json to env.json)
-Put token in env.json
-`php command save Ping`
+`php bot setup`
+Enter token
+`php bot save Ping`
 `php index.php`
 
 **NOTE: I have all intents enabled by default you can change them in index.php**
