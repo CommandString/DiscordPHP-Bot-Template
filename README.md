@@ -298,20 +298,10 @@ $env->interactions = [
 # Using the example
 `composer install`
 
-`php bot setup`
+`php bot s` (s is an alias for setup)
 
 Enter token
 
-`php bot save Ping`
+`php bot sc save Ping` (sc is an alias for slashcommands)
 
 `php index.php`
-
-**NOTE: I have all intents enabled by default you can change them in index.php**
-
-# Need additional assistance?
-
-I've created a discord server that you can join if you have any trouble setting up this template!
-
-[Command's Dev Server](https://discord.gg/TgrcSkuDtQ) 
-
-*I'll find a better name eventually XD*
