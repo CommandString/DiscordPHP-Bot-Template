@@ -16,7 +16,7 @@ The unofficial DiscordPHP Bot boilerplate
 
 [Using example](#using-the-example)
 
-[Need Assistance](#need-additional-assistance)
+[Helper Functions](#helper-functions)
 
 # Important Resources #
 
@@ -305,3 +305,76 @@ Enter token
 `php bot sc save Ping` (sc is an alias for slashcommands)
 
 `php index.php`
+
+# Helper functions
+
+Inside `Common/Helpers.php` there's a bunch of utility commands that can make some repetitive tasks easier
+
+[newOption](#newoption)
+
+[newChoice](#newChoice)
+
+[newPartDiscord](#newPartDiscord)
+
+[messageWithContent](#messageWithContent)
+
+[createLocalFileAttachment](#createLocalFileAttachment)
+
+[buildActionRowWithButtons](#buildActionRowWithButtons)
+
+[newButton](#newButton)
+
+[getOptionFromInteraction](#getOptionFromInteraction)
+
+[emptyEmbedField](#emptyEmbedField)
+
+
+## newOption
+```php 
+newOption(string $name, string $description, int $type, bool $required = false): Option
+```
+---
+## newChoice
+```php
+newChoice(string $name, float|int|string $value): Choice
+```
+---
+## newPartDiscord
+```php
+newPartDiscord(string $class, mixed ...$args): mixed
+```
+---
+## messageWithContent
+
+```php
+messageWithContent(string $content): MessageBuilder
+```
+---
+## createLocalFileAttachment
+
+```php
+createLocalFileAttachment(string $fileName): Attachment
+```
+---
+## buildActionRowWithButtons
+
+```php
+buildActionRowWithButtons(Button ...$buttons): ActionRow
+```
+---
+## newButton
+
+```php
+newButton(int $style, string $label, ?string $custom_id = null): Button
+```
+---
+## getOptionFromInteraction
+
+```php
+getOptionFromInteraction(Collection|Interaction $options, string ...$names): ?RequestOption
+```
+---
+## emptyEmbedField
+```php
+emptyEmbedField(?Embed $embed = null): array|Embed
+```
