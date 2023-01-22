@@ -18,7 +18,7 @@ use Throwable;
 
 use function React\Async\await;
 
-#[AsCommand(name: 'SlashCommands', description: 'Setup slash commands')]
+#[AsCommand(name: 'SlashCommands', description: 'Setup slash commands', aliases: ["sc"])]
 class SlashCommands extends Command
 {
     protected function configure(): void
