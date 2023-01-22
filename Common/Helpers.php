@@ -8,6 +8,7 @@ use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
 use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Attachment;
+use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Choice;
 use Discord\Parts\Interactions\Command\Option;
 use Discord\Parts\Interactions\Interaction;
@@ -83,4 +84,15 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
     }
 
     return $option;
+}
+
+function emptyEmbedField(?Embed $embed = null): array|Embed
+{
+    $emptyField = ["name" => "\u{200b}", "value" => "\u{200b}"];
+
+    if (!is_null($embed)) {
+        return $embed->addField($emptyField);
+    } else {
+        return $emptyField;
+    }
 }
