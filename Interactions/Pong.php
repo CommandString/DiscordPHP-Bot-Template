@@ -12,6 +12,6 @@ class Pong extends BaseInteraction {
     public static function handler(Interaction $interaction, Discord $discord, int $timesPonged = null)
     {
         $timesPonged++;
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent("Ping $timesPonged :ping_pong:")->addComponent(\Commands\Ping::getActionRow($timesPonged, true)), true);
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent("Ping {$timesPonged} :ping_pong:")->addComponent(\Commands\Ping::getActionRow($timesPonged, true)), true);
     }
 }

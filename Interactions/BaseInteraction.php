@@ -3,7 +3,6 @@
 namespace Interactions;
 
 use CommandString\Env\Env;
-use CommandString\Utils\ArrayUtils;
 use Discord\Discord;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
@@ -18,7 +17,7 @@ abstract class BaseInteraction {
     final public static function listen(): void
     {
         if (empty(self::$listen)) {
-            $handler = function (Interaction $interaction, Discord $discord) {
+            $handler = static function (Interaction $interaction, Discord $discord) {
                 if (!isset(static::$id)) {
                     return;
                 }

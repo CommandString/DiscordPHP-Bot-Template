@@ -25,7 +25,7 @@ abstract class BaseEvent {
 
     public static function listen(): void
     {
-        $function = function (mixed...$args) {
+        $function = static function (mixed...$args) {
             static::handler(...$args);
         };
 

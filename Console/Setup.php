@@ -3,10 +3,10 @@
 namespace Console;
 
 use stdClass;
-use \Symfony\Component\Console\Attribute\AsCommand;
-use \Symfony\Component\Console\Command\Command;
-use \Symfony\Component\Console\Input\InputInterface;
-use \Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 #[AsCommand(name: 'setup', description: 'First time setup', aliases: ["s"])]
@@ -23,28 +23,29 @@ class Setup extends Command
 
         $helper = $this->getHelper('question');
 
-        $getConfig = function ($template, $prefix = '') use (&$getConfig, $input, $output, $helper) {
+        $getConfig = static function ($template, $prefix = '') use (&$getConfig, $helper, $input, $output)
+		{
             $items = [];
 
             foreach ($template as $name => $item) {
                 if (is_array($item) || $item instanceof stdClass) {
-                    $items[$name] = $getConfig($item, "$name->");
+                    $items[$name] = $getConfig($item, "{$name}->");
                     continue;
                 }
 
                 $questionString = "<question>".ucfirst($prefix).ucfirst($name);
-                
-                
+
+
                 if ($item !== '') {
                     if (is_bool($item)) {
                         $itemString = ($item) ? 'true' : 'false';
                     } else {
                         $itemString = $item;
                     }
-                    
-                    $questionString .= " (default: $itemString)";
+
+                    $questionString .= " (default: {$itemString})";
                 }
-                
+
                 $questionString .= ': ';
 
                 $question = new Question($questionString, $item);

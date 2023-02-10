@@ -21,7 +21,7 @@ class Ping extends BaseCommand {
 
     public static function getActionRow(int $times, bool $ping): ActionRow
     {
-        $button = ($ping) ? newButton(Button::STYLE_PRIMARY, "Ping", "Ping|$times") : newButton(Button::STYLE_SECONDARY, "Pong", "Pong|$times");
+        $button = ($ping) ? newButton(Button::STYLE_PRIMARY, "Ping", "Ping|{$times}") : newButton(Button::STYLE_SECONDARY, "Pong", "Pong|{$times}");
 
         return buildActionRowWithButtons($button);
     }
