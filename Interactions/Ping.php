@@ -13,6 +13,6 @@ class Ping extends BaseInteraction {
     public static function handler(Interaction $interaction, Discord $discord, int $timesPinged = null)
     {
         $timesPinged++;
-        $interaction->respondWithMessage(MessageBuilder::new()->setContent("Pong $timesPinged :ping_pong:")->addComponent(CommandsPing::getActionRow($timesPinged, false)), true);
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent("Pong {$timesPinged} :ping_pong:")->addComponent(CommandsPing::getActionRow($timesPinged, false)), true);
     }
 }

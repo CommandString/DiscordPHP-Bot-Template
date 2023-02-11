@@ -52,7 +52,7 @@ function createLocalFileAttachment(string $fileName): Attachment
 function buildActionRowWithButtons(Button ...$buttons): ActionRow
 {
     $actionRow = new ActionRow();
-    
+
     foreach ($buttons as $button) {
         $actionRow->addComponent($button);
     }
@@ -71,6 +71,7 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
         $options = $options->data->options;
     }
 
+	$option = null;
     foreach ($names as $key => $name) {
         $option = $options->get("name", $name);
 
@@ -78,7 +79,7 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
             $options = $option?->options;
         }
 
-        if (is_null($options) || is_null($option)) {
+        if ($options === null || $option === null) {
             break;
         }
     }
@@ -90,9 +91,9 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
 {
     $emptyField = ["name" => "\u{200b}", "value" => "\u{200b}"];
 
-    if (!is_null($embed)) {
+    if ($embed !== null) {
         return $embed->addField($emptyField);
-    } else {
-        return $emptyField;
     }
+
+	return $emptyField;
 }

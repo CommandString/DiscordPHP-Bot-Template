@@ -2,11 +2,13 @@
 <?php
 require __DIR__.'/vendor/autoload.php';
 
+use Console\Setup;
+use Console\SlashCommands;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-$application->add(new \Console\Setup(null));
-$application->add(new \Console\SlashCommands(null));
+$application->add(new Setup(null));
+$application->add(new SlashCommands(null));
 
 $application->run();
