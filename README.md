@@ -189,21 +189,21 @@ If this is about a command already existing for a command you're listening for t
 
 You can use the PHP script below to add a command to your application or update an existing one.
 
-`php bot save commandName`
+`php bot sc save commandName`
 
 ### Deleting Commands From Your Application ###
 
 Similar to adding and updating commands to your application you can just swap save with delete.
 
-`php bot delete commandName`
+`php bot sc delete commandName`
 
 ### Deleting All Commands From Your Application ###
 
-`php bot delete all`
+`php bot sc deleteall`
 
-### Using command for commands in a subdirectory?
+### Using sc comamnd for commands in a subdirectory?
 
-If your command's path, for example, is `Commands/Admin/Ban.php` instead of doing `php action Ban` you would do `php action Admin\\Ban`
+If your command's path, for example, is `Commands/Admin/Ban.php` instead of doing `php bot sc action Ban` you would do `php bot sc action Admin\\Ban`
 
 *Note the namespace in Ban.php would have to be `Commands\Admin` to work!*
 
