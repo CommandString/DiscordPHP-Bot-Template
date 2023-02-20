@@ -36,7 +36,7 @@ $env->commands = [
 # |______   \/   |______ |  \_|    |    ______|
 
 $env->events = [
-    Events\ready::class
+    Events\init::class
 ];
 
 # _____ __   _ _______ _______  ______ _______ _______ _______ _____  _____  __   _ _______
@@ -48,7 +48,7 @@ $env->interactions = [
     Interactions\Pong::class
 ];
 
-Events\ready::listen();
+Events\init::listen();
 
 #  ______ _     _ __   _
 # |_____/ |     | | \  |

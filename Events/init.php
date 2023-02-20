@@ -5,7 +5,7 @@ namespace Events;
 use CommandString\Env\Env;
 use Discord\Discord;
 
-class ready extends BaseEvent {
+class init extends BaseEvent {
     protected static string $event = "init";
 
     private const COMMANDS = 0;
