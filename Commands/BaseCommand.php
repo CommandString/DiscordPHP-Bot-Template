@@ -116,4 +116,11 @@ abstract class BaseCommand {
             $listen($cmd_name);
         }
     }
+
+    public function __toString() {
+        if (is_array($this::$name)) {
+            return ($this::$name)[0];
+        }
+        return $this::$name;
+    }
 }

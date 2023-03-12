@@ -1,7 +1,8 @@
 <?php
 
-namespace Commands;
+namespace Commands\Examples;
 
+use Commands\BaseCommand;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
 

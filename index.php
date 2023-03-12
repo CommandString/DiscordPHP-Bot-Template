@@ -28,7 +28,8 @@ $env->discord = new Discord([
 # |_____  |_____| |  |  | |  |  | |     | |  \_| |_____/ ______|
 
 $env->commands = [
-    Commands\Ping::class
+    Commands\Ping::class,
+    Commands\Examples\Sub::class,
 ];
 
 # _______ _    _ _______ __   _ _______ _______
