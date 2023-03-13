@@ -67,7 +67,7 @@ abstract class BaseCommand
 
     public static function getBaseCommandName(): string
     {
-        return is_array(self::$name) ? self::$name[0] : self::$name;
+        return is_array(static::$name) ? static::$name[0] : static::$name;
     }
 
     public static function save(): ExtendedPromiseInterface
