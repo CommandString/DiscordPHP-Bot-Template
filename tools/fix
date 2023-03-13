@@ -1,0 +1,3 @@
+#!/bin/bash
+./vendor/bin/phpcbf --standard=psr12 ./Commands ./Common ./Events ./Interactions
+./vendor/bin/phpcbf --standard=psr1 ./Commands ./Common ./Events ./Interactions

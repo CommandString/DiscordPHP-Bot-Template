@@ -5,7 +5,8 @@ namespace Events;
 use CommandString\Env\Env;
 use Discord\Discord;
 
-class init extends BaseEvent {
+class Init extends BaseEvent
+{
     protected static string $event = "init";
 
     private const COMMANDS = 0;
@@ -19,12 +20,12 @@ class init extends BaseEvent {
         $listened = [Env::get("commands"), Env::get("events"), Env::get("interactions")];
 
         foreach ($listened as $type => $classes) {
-			$typeString = match ($type) {
-				self::COMMANDS => "command",
-				self::EVENTS => "event",
-				self::INTERACTIONS => "interaction",
-				default => "",
-			};
+            $typeString = match ($type) {
+                self::COMMANDS => "command",
+                self::EVENTS => "event",
+                self::INTERACTIONS => "interaction",
+                default => "",
+            };
 
             foreach ($classes as $class) {
                 if ($class !== self::class) {

@@ -4,7 +4,8 @@ namespace Events;
 
 use CommandString\Env\Env;
 
-abstract class BaseEvent {
+abstract class BaseEvent
+{
     protected static string $event = "";
     protected static bool $runOnce = false;
 
@@ -25,7 +26,7 @@ abstract class BaseEvent {
 
     public static function listen(): void
     {
-        $function = static function (mixed...$args) {
+        $function = static function (mixed ...$args) {
             static::handler(...$args);
         };
 
