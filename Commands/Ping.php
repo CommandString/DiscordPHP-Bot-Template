@@ -35,7 +35,7 @@ class Ping extends BaseCommand
     public static function getConfig(): CommandBuilder|array
     {
         return (new CommandBuilder())
-            ->setName(self::$name)
+            ->setName(self::getBaseCommandName())
             ->setDescription("Ping the bot")
         ;
     }
