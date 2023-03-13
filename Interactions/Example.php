@@ -7,7 +7,8 @@ use Discord\Discord;
 
 use function Common\messageWithContent;
 
-class Example extends BaseInteraction {
+class Example extends BaseInteraction
+{
     protected static string $id = "Example";
     protected static bool $runOnce = false;
 

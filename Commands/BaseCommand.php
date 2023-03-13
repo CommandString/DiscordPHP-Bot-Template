@@ -13,7 +13,8 @@ use React\Promise\ExtendedPromiseInterface;
 
 use function React\Async\await;
 
-abstract class BaseCommand {
+abstract class BaseCommand
+{
     protected static string $guild = "";
     protected static string|array $name = "";
 
@@ -21,7 +22,6 @@ abstract class BaseCommand {
 
     public static function autocomplete(Interaction $interaction): void
     {
-
     }
 
     public static function getGuild(): string
@@ -43,7 +43,7 @@ abstract class BaseCommand {
 
     public static function delete(): ExtendedPromiseInterface
     {
-		/** @var Discord $discord */
+        /** @var Discord $discord */
         $discord = Env::get()->discord;
 
         if (static::isGuildCommand()) {
@@ -55,15 +55,20 @@ abstract class BaseCommand {
         $command = $commands->get("name", static::$name);
 
         if ($command === null) {
-            throw new Exception("Command ".static::$name." isn't registered to the discord bot!");
+            throw new Exception("Command " . static::$name . " isn't registered to the discord bot!");
         }
 
         if (!static::isGuildCommand()) {
             return $discord->application->commands->delete($command);
         }
 
-		return $discord->guilds->get("id", static::$guild)->commands->delete($command);
-	}
+        return $discord->guilds->get("id", static::$guild)->commands->delete($command);
+    }
+
+    public static function getBaseCommandName(): string
+    {
+        return is_array(self::$name) ? self::$name[0] : self::$name;
+    }
 
     public static function save(): ExtendedPromiseInterface
     {
@@ -82,8 +87,8 @@ abstract class BaseCommand {
             return $discord->guilds[static::$guild]->commands->save($command);
         }
 
-		return $discord->application->commands->save($command);
-	}
+        return $discord->application->commands->save($command);
+    }
 
     public static function listen(): void
     {
@@ -98,7 +103,9 @@ abstract class BaseCommand {
                     static::autocomplete($interaction);
                 });
             } catch (LogicException $e) {
-                echo "Warning caught: {$e->getMessage()}\nIf this is about a command already existing for a command you're listening for that has a separate subcommand handler you can safely ignore this :)\n";
+                echo 'Warning caught: ' . $e->getMessage() . '
+                If this is about a command already existing for a command you\'re listening for
+                that has a separate subcommand handler you can safely ignore this :)\n';
             }
         };
 

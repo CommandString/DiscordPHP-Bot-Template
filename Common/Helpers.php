@@ -71,11 +71,11 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
         $options = $options->data->options;
     }
 
-	$option = null;
+    $option = null;
     foreach ($names as $key => $name) {
         $option = $options->get("name", $name);
 
-        if ($key !== count($names)-1) {
+        if ($key !== count($names) - 1) {
             $options = $option?->options;
         }
 
@@ -95,5 +95,5 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
         return $embed->addField($emptyField);
     }
 
-	return $emptyField;
+    return $emptyField;
 }

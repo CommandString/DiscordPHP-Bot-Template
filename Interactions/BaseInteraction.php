@@ -7,7 +7,8 @@ use Discord\Discord;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 
-abstract class BaseInteraction {
+abstract class BaseInteraction
+{
     protected static string $id = "";
     protected static bool $runOnce = false;
     private static array $listen = [];
