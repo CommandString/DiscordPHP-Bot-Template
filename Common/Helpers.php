@@ -6,6 +6,7 @@ use CommandString\Env\Env;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
+use Discord\Discord;
 use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Choice;
@@ -145,14 +146,14 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
  * if you leave the `$embed` option `null` then an array containing the empty field will be returned
  *
  * ```php
- * $embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+ * $embed = newDiscordPart("\Discord\Parts\Embed\Embed");
  * emptyEmbedField($embed);
  * ```
  *
  * or
  *
  * ```php
- * $embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+ * $embed = newDiscordPart("\Discord\Parts\Embed\Embed");
  * $emptyField = emptyEmbedField();
  * ```
  */
@@ -165,4 +166,12 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
     }
 
     return $emptyField;
+}
+
+/**
+ * Retrieve the `\Discord\Discord` instance from Environment
+ */
+function getDiscord(): Discord
+{
+    return Env::get()->discord;
 }
