@@ -68,7 +68,7 @@ foreach ($lines as $key => $line) {
 ?>
 
 ## Return Type
-`<?= $returnType ?>`
+`<?= trim($returnType) ?>`
 
 <?php if (!empty($description)) { ?>
 ## Description

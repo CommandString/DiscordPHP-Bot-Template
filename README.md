@@ -345,7 +345,7 @@ function newSlashCommandOption(string $name, string $description, int $type, boo
 | bool   | $required    |
 
 ## Return Type
-` Option`
+`Option`
 
 ## Description
 Create a new Option used for building slash commands
@@ -366,7 +366,7 @@ function newSlashCommandChoice(string $name, float|int|string $value): Choice
 | float  | int   | string | $value |
 
 ## Return Type
-` Choice`
+`Choice`
 
 ## Description
 Create a new Choice used for building slash commands
@@ -387,7 +387,7 @@ function newDiscordPart(string $class, mixed ...$args): mixed
 | mixed  | ...$args |
 
 ## Return Type
-` mixed`
+`mixed`
 
 ## Description
 Create a new instance of an object that requires `\Discord\Discord` as the first argument
@@ -411,7 +411,7 @@ function messageWithContent(string $content): MessageBuilder
 | string | $content |
 
 ## Return Type
-` MessageBuilder`
+`MessageBuilder`
 
 ## Description
 Create a new MessageBuilder object with the content define for creating simple MessageBuilders quickly
@@ -435,7 +435,7 @@ function buildActionRowWithButtons(Button ...$buttons): ActionRow
 | Button | ...$buttons |
 
 ## Return Type
-` ActionRow`
+`ActionRow`
 
 ## Description
 Quickly build an action row with multiple buttons
@@ -472,7 +472,7 @@ function newButton(int $style, string $label, ?string $custom_id = null): Button
 | ?string | $custom_id |
 
 ## Return Type
-` Button`
+`Button`
 
 ## Description
 Quickly create button objects
@@ -497,7 +497,7 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
 | string     | ...$names   |
 
 ## Return Type
-` Option|null`
+`Option|null`
 
 ## Description
 Get an option from an Interaction/Interaction Repository by specifying the option(s) name
@@ -531,7 +531,7 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
 | ?Embed | $embed |
 
 ## Return Type
-` array|Embed`
+`array|Embed`
 
 ## Description
 Append to grab and empty array field. You can supply an embed to have the empty field added or
