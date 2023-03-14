@@ -306,75 +306,245 @@ Enter token
 
 `php index.php`
 
-# Helper functions
+# Helper Functions
 
 Inside `Common/Helpers.php` there's a bunch of utility commands that can make some repetitive tasks easier
 
-[newOption](#newoption)
-
-[newChoice](#newChoice)
-
-[newPartDiscord](#newPartDiscord)
-
-[messageWithContent](#messageWithContent)
-
-[createLocalFileAttachment](#createLocalFileAttachment)
-
-[buildActionRowWithButtons](#buildActionRowWithButtons)
-
-[newButton](#newButton)
+[emptyEmbedField](#emptyEmbedField)
 
 [getOptionFromInteraction](#getOptionFromInteraction)
 
-[emptyEmbedField](#emptyEmbedField)
+[newButton](#newButton)
+
+[buildActionRowWithButtons](#buildActionRowWithButtons)
+
+[messageWithContent](#messageWithContent)
+
+[newDiscordPart](#newDiscordPart)
+
+[newSlashCommandChoice](#newSlashCommandChoice)
+
+[newSlashCommandOption](#newSlashCommandOption)
 
 
-## newOption
-```php 
-newOption(string $name, string $description, int $type, bool $required = false): Option
-```
----
-## newChoice
-```php
-newChoice(string $name, float|int|string $value): Choice
-```
----
-## newPartDiscord
-```php
-newPartDiscord(string $class, mixed ...$args): mixed
-```
----
-## messageWithContent
+# newSlashCommandOption
+
+## Header
 
 ```php
-messageWithContent(string $content): MessageBuilder
+function newSlashCommandOption(string $name, string $description, int $type, bool $required = false): Option
 ```
----
-## createLocalFileAttachment
+
+## Arguments
+
+| Type   | Name         |
+| ------ | ------------ |
+| string | $name        |
+| string | $description |
+| int    | $type        |
+| bool   | $required    |
+
+## Return Type
+` Option`
+
+## Description
+Create a new Option used for building slash commands
+
+# newSlashCommandChoice
+
+## Header
 
 ```php
-createLocalFileAttachment(string $fileName): Attachment
+function newSlashCommandChoice(string $name, float|int|string $value): Choice
 ```
----
-## buildActionRowWithButtons
+
+## Arguments
+
+| Type   | Name  |
+| ------ | ----- |
+| string | $name |
+| float  | int   | string | $value |
+
+## Return Type
+` Choice`
+
+## Description
+Create a new Choice used for building slash commands
+
+# newDiscordPart
+
+## Header
 
 ```php
-buildActionRowWithButtons(Button ...$buttons): ActionRow
+function newDiscordPart(string $class, mixed ...$args): mixed
 ```
----
-## newButton
+
+## Arguments
+
+| Type   | Name     |
+| ------ | -------- |
+| string | $class   |
+| mixed  | ...$args |
+
+## Return Type
+` mixed`
+
+## Description
+Create a new instance of an object that requires `\Discord\Discord` as the first argument
 
 ```php
-newButton(int $style, string $label, ?string $custom_id = null): Button
+$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
 ```
----
-## getOptionFromInteraction
+
+# messageWithContent
+
+## Header
 
 ```php
-getOptionFromInteraction(Collection|Interaction $options, string ...$names): ?RequestOption
+function messageWithContent(string $content): MessageBuilder
 ```
----
-## emptyEmbedField
+
+## Arguments
+
+| Type   | Name     |
+| ------ | -------- |
+| string | $content |
+
+## Return Type
+` MessageBuilder`
+
+## Description
+Create a new MessageBuilder object with the content define for creating simple MessageBuilders quickly
+
 ```php
-emptyEmbedField(?Embed $embed = null): array|Embed
+$message = messageWithContent("Hello World");
+```
+
+# buildActionRowWithButtons
+
+## Header
+
+```php
+function buildActionRowWithButtons(Button ...$buttons): ActionRow
+```
+
+## Arguments
+
+| Type   | Name        |
+| ------ | ----------- |
+| Button | ...$buttons |
+
+## Return Type
+` ActionRow`
+
+## Description
+Quickly build an action row with multiple buttons
+
+```php
+$banButton = (new Button(Button::STYLE_DANGER))->setLabel("Ban User");
+$kickButton = (new Button(Button::STYLE_DANGER))->setLabel("Kick User");
+$actionRow = buildActionRowWithButtons($banButton, $kickButton);
+```
+
+*This can also be paired with newButton*
+
+```php
+$actionRow = buildActionWithButtons(
+ newButton(Button::STYLE_DANGER, "Ban User")
+ newButton(Button::STYLE_DANGER, "Kick User")
+);
+```
+
+# newButton
+
+## Header
+
+```php
+function newButton(int $style, string $label, ?string $custom_id = null): Button
+```
+
+## Arguments
+
+| Type    | Name       |
+| ------- | ---------- |
+| int     | $style     |
+| string  | $label     |
+| ?string | $custom_id |
+
+## Return Type
+` Button`
+
+## Description
+Quickly create button objects
+
+```php
+$button = newButton(Button::STYLE_DANGER, "Kick User", "Kick|Command_String");
+```
+
+# getOptionFromInteraction
+
+## Header
+
+```php
+function getOptionFromInteraction(Collection|Interaction $options, string ...$names): Option|null
+```
+
+## Arguments
+
+| Type       | Name        |
+| ---------- | ----------- |
+| Collection | Interaction | $options |
+| string     | ...$names   |
+
+## Return Type
+` Option|null`
+
+## Description
+Get an option from an Interaction/Interaction Repository by specifying the option(s) name
+
+For regular slash commands
+`/ban :user`
+
+```php
+$user = getOptionFromInteraction($interaction, "user");
+```
+
+For sub commands / sub command groups you can stack the names
+`/admin ban :user`
+
+```php
+$user = getOptionFromInteraction($interaction->data->options, "ban", "user");
+```
+
+# emptyEmbedField
+
+## Header
+
+```php
+function emptyEmbedField(?Embed $embed = null): array|Embed
+```
+
+## Arguments
+
+| Type   | Name   |
+| ------ | ------ |
+| ?Embed | $embed |
+
+## Return Type
+` array|Embed`
+
+## Description
+Append to grab and empty array field. You can supply an embed to have the empty field added or
+if you leave the `$embed` option `null` then an array containing the empty field will be returned
+
+```php
+$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+emptyEmbedField($embed);
+```
+
+or
+
+```php
+$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+$emptyField = emptyEmbedField();
 ```
