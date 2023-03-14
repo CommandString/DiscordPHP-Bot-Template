@@ -41,7 +41,7 @@ function newSlashCommandChoice(string $name, float|int|string $value): Choice
  * Create a new instance of an object that requires `\Discord\Discord` as the first argument
  *
  * ```php
- * $embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+ * $embed = newDiscordPart("\Discord\Parts\Embed\Embed);
  * ```
  */
 function newDiscordPart(string $class, mixed ...$args): mixed
