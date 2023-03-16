@@ -339,12 +339,12 @@ function newSlashCommandOption(string $name, string $description, int $type, boo
 
 ## Arguments
 
-| Type   | Name         |
-| ------ | ------------ |
-| string | $name        |
-| string | $description |
-| int    | $type        |
-| bool   | $required    |
+| Type | Name |
+|------|------|
+|string|$name| 
+|string|$description| 
+|int|$type| 
+|bool|$required| 
 
 ## Return Type
 `Option`
@@ -362,10 +362,10 @@ function newSlashCommandChoice(string $name, float|int|string $value): Choice
 
 ## Arguments
 
-| Type   | Name  |
-| ------ | ----- |
-| string | $name |
-| float  | int   | string | $value |
+| Type | Name |
+|------|------|
+|string|$name| 
+|float|int|string|$value| 
 
 ## Return Type
 `Choice`
@@ -383,10 +383,10 @@ function newDiscordPart(string $class, mixed ...$args): mixed
 
 ## Arguments
 
-| Type   | Name     |
-| ------ | -------- |
-| string | $class   |
-| mixed  | ...$args |
+| Type | Name |
+|------|------|
+|string|$class| 
+|mixed|...$args| 
 
 ## Return Type
 `mixed`
@@ -408,9 +408,9 @@ function messageWithContent(string $content): MessageBuilder
 
 ## Arguments
 
-| Type   | Name     |
-| ------ | -------- |
-| string | $content |
+| Type | Name |
+|------|------|
+|string|$content| 
 
 ## Return Type
 `MessageBuilder`
@@ -432,9 +432,9 @@ function buildActionRowWithButtons(Button ...$buttons): ActionRow
 
 ## Arguments
 
-| Type   | Name        |
-| ------ | ----------- |
-| Button | ...$buttons |
+| Type | Name |
+|------|------|
+|Button|...$buttons| 
 
 ## Return Type
 `ActionRow`
@@ -467,11 +467,11 @@ function newButton(int $style, string $label, ?string $custom_id = null): Button
 
 ## Arguments
 
-| Type    | Name       |
-| ------- | ---------- |
-| int     | $style     |
-| string  | $label     |
-| ?string | $custom_id |
+| Type | Name |
+|------|------|
+|int|$style| 
+|string|$label| 
+|?string|$custom_id| 
 
 ## Return Type
 `Button`
@@ -493,10 +493,10 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
 
 ## Arguments
 
-| Type       | Name        |
-| ---------- | ----------- |
-| Collection | Interaction | $options |
-| string     | ...$names   |
+| Type | Name |
+|------|------|
+|Collection|Interaction|$options| 
+|string|...$names| 
 
 ## Return Type
 `Option|null`
@@ -528,9 +528,9 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
 
 ## Arguments
 
-| Type   | Name   |
-| ------ | ------ |
-| ?Embed | $embed |
+| Type | Name |
+|------|------|
+|?Embed|$embed| 
 
 ## Return Type
 `array|Embed`
@@ -559,11 +559,6 @@ $emptyField = emptyEmbedField();
 function getDiscord(): Discord
 ```
 
-## Arguments
-
-| Type | Name |
-| ---- | ---- |
-|      |      |
 
 ## Return Type
 `Discord`
