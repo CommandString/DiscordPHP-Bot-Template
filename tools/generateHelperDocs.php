@@ -49,6 +49,7 @@ foreach ($lines as $key => $line) {
 
 ```
 
+<?php if (!empty($params[0])) { ?>
 ## Arguments
 
 | Type | Name |
@@ -65,6 +66,7 @@ foreach ($lines as $key => $line) {
 |<?= $type ?>|<?= $name ?>| 
 <?php
     }
+}
 ?>
 
 ## Return Type
