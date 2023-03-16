@@ -43,7 +43,7 @@ class Guild extends BaseCommand
             ->addFieldValues('Member Count', $guild->member_count, true)
             ->addFieldValues('Channel Count', $guild->channels->count(), true)
             ->addFieldValues("Emoji Count", $guild->emojis->count(), true)
-            ->addFieldValues("Snowflake", $guild->id, true)
+            ->addFieldValues("Snowflake", "`{$guild->id}`", true)
 
             ->setFooter("Created ")
             ->setTimestamp($guild->createdTimestamp())
