@@ -310,6 +310,8 @@ Enter token
 
 Inside `Common/Helpers.php` there's a bunch of utility commands that can make some repetitive tasks easier
 
+[getDiscord](#getDiscord)
+
 [emptyEmbedField](#emptyEmbedField)
 
 [getOptionFromInteraction](#getOptionFromInteraction)
@@ -393,7 +395,7 @@ function newDiscordPart(string $class, mixed ...$args): mixed
 Create a new instance of an object that requires `\Discord\Discord` as the first argument
 
 ```php
-$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+$embed = newDiscordPart("\Discord\Parts\Embed\Embed);
 ```
 
 # messageWithContent
@@ -538,13 +540,33 @@ Append to grab and empty array field. You can supply an embed to have the empty 
 if you leave the `$embed` option `null` then an array containing the empty field will be returned
 
 ```php
-$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+$embed = newDiscordPart("\Discord\Parts\Embed\Embed");
 emptyEmbedField($embed);
 ```
 
 or
 
 ```php
-$embed = newDiscordPart(\Discord\Parts\Embed\Embed);
+$embed = newDiscordPart("\Discord\Parts\Embed\Embed");
 $emptyField = emptyEmbedField();
 ```
+
+# getDiscord
+
+## Header
+
+```php
+function getDiscord(): Discord
+```
+
+## Arguments
+
+| Type | Name |
+| ---- | ---- |
+|      |      |
+
+## Return Type
+`Discord`
+
+## Description
+Retrieve the `\Discord\Discord` instance from Environment
