@@ -11,11 +11,8 @@ use Discord\Parts\User\User;
 use Throwable;
 
 use function Common\buildActionRowWithButtons;
-use function Common\emptyEmbedField;
-use function Common\getDiscord;
 use function Common\newButton;
 use function Common\newDiscordPart;
-use function React\Async\await;
 
 class Guild extends BaseCommand
 {
@@ -30,7 +27,7 @@ class Guild extends BaseCommand
         /** @var User $owner */
         $guild = $interaction->guild;
         $embed = newDiscordPart(Embed::class);
-        $msg = new MessageBuilder;
+        $msg = new MessageBuilder();
 
 
         if ($owner = $guild->owner) {

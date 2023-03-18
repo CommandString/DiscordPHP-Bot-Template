@@ -17,17 +17,17 @@ class GuildInfo extends BaseInteraction
     protected static string $id = "GuildInfo";
 
     public static function handler(Interaction $interaction, Discord $discord, int $actionId = 0)
-    {   
+    {
         /** @var Embed $embed */
         if ($actionId < 1 || $actionId > 2) {
             $interaction->respondWithMessage(messageWithContent("Invalid Action"), true);
             return;
         }
 
-        $msg = new MessageBuilder;
+        $msg = new MessageBuilder();
         $embed = newDiscordPart(Embed::class);
         $guild = $interaction->guild;
-        
+
         $embed->setAuthor($guild->name, $guild->icon, $guild->invites->first());
 
         if ($actionId === GuildCommand::VIEW_EMOJIS) {
@@ -41,7 +41,7 @@ class GuildInfo extends BaseInteraction
             }
 
             $embed->setTitle("{$guild->name} Emojis")->setDescription($emojiString);
-        } else if ($actionId === GuildCommand::VIEW_ICON) {
+        } elseif ($actionId === GuildCommand::VIEW_ICON) {
             $embed->setTitle("{$guild->name} Icon")->setImage($guild->icon);
         }
 
