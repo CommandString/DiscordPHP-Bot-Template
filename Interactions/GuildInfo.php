@@ -19,10 +19,6 @@ class GuildInfo extends BaseInteraction
     public static function handler(Interaction $interaction, Discord $discord, int $actionId = 0)
     {
         /** @var Embed $embed */
-        if ($actionId < 1 || $actionId > 2) {
-            $interaction->respondWithMessage(messageWithContent("Invalid Action"), true);
-            return;
-        }
 
         $msg = new MessageBuilder();
         $embed = newDiscordPart(Embed::class);
@@ -41,8 +37,26 @@ class GuildInfo extends BaseInteraction
             }
 
             $embed->setTitle("{$guild->name} Emojis")->setDescription($emojiString);
-        } elseif ($actionId === GuildCommand::VIEW_ICON) {
-            $embed->setTitle("{$guild->name} Icon")->setImage($guild->icon);
+        } elseif ($actionId === GuildCommand::ICON_URL) {
+            $embed
+                ->setTitle("{$guild->name} Icon Url")
+                ->setThumbnail($guild->icon)
+                ->setDescription("$guild->icon")
+            ;
+        } elseif ($actionId === GuildCommand::LIST_MEMBERS) {
+            $desc = "";
+
+            foreach ($guild->members as $member) {
+                $desc .= "$member\n";
+            }
+
+            $embed
+                ->setTitle("{$guild->name} Members")
+                ->setDescription($desc)
+            ;
+        } else {
+            $interaction->respondWithMessage(messageWithContent("Invalid Action"), true);
+            return;
         }
 
         $msg->addEmbed($embed);
