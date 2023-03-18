@@ -8,7 +8,6 @@ use Discord\Builders\MessageBuilder;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Interaction;
 use Discord\Parts\User\User;
-use Throwable;
 
 use function Common\buildActionRowWithButtons;
 use function Common\newButton;
@@ -17,7 +16,8 @@ use function Common\newDiscordPart;
 class Guild extends BaseCommand
 {
     public const VIEW_EMOJIS = 1;
-    public const VIEW_ICON = 2;
+    public const ICON_URL = 2;
+    public const LIST_MEMBERS = 3;
 
     protected static array|string $name = 'guild';
 
@@ -35,7 +35,8 @@ class Guild extends BaseCommand
         }
 
         $embed
-            ->setAuthor($guild->name, $guild->icon, $guild->invites->first())
+            ->setAuthor($guild->name, null)
+            ->setThumbnail($guild->icon)
             ->setDescription($guild->description ?? "")
             ->addFieldValues('Member Count', $guild->member_count, true)
             ->addFieldValues('Channel Count', $guild->channels->count(), true)
@@ -51,12 +52,13 @@ class Guild extends BaseCommand
 
         $msg->addComponent(
             buildActionRowWithButtons(
-                $newButton("View Icon", self::VIEW_ICON),
+                $newButton("Icon URL", self::ICON_URL),
                 $newButton("View Emojis", self::VIEW_EMOJIS),
+                $newButton("List Members", self::LIST_MEMBERS),
             )
         );
 
-        $interaction->respondWithMessage($msg);
+        $interaction->respondWithMessage($msg, true);
     }
 
     public static function autocomplete(Interaction $interaction): void
