@@ -48,7 +48,8 @@ class Guild extends BaseCommand
         ;
         $msg->addEmbed($embed);
 
-        $newButton = fn(string $action, string $actionId) => newButton(Button::STYLE_PRIMARY, $action, "GuildInfo|{$actionId}");
+        $newButton =
+            fn(string $action, string $actionId) => newButton(Button::STYLE_PRIMARY, $action, "GuildInfo|{$actionId}");
 
         $msg->addComponent(
             buildActionRowWithButtons(
