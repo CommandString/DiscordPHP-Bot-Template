@@ -29,8 +29,8 @@ The unofficial DiscordPHP Bot boilerplate
 
 # Environment Configuration #
 
-1. Copy `env.example.json` to `env.json`.
-2. Open `env.json` and add your bot token, you can also add additional environment variables that pertain to your bot. Such as mysql credentials.
+1. Copy `.env.example` to `.env`.
+2. Open `.env` and add your bot token, you can also add additional environment variables that pertain to your bot. Such as mysql credentials.
 
 ### Retrieving Environment Variables ###
 
@@ -44,9 +44,13 @@ Env::get()->variableName;
 Env::get()->variableName = "value";
 ```
 
-*You can read more at [CommandString/Env](https://github.com/commandstring/env)*
+### Dedicated Env function
 
-**NOTE: Environment variables are readonly properties**
+```php
+use function Common\env;
+
+Env::get() === env(); // these do the same thing
+```
 
 # Events #
 
