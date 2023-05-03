@@ -2,7 +2,7 @@
 
 namespace Events;
 
-use CommandString\Env\Env;
+use function Common\env;
 use Discord\Discord;
 
 class Init extends BaseEvent
@@ -17,7 +17,7 @@ class Init extends BaseEvent
     {
         echo "\n{$discord->application->name} ready!\n\n";
 
-        $listened = [Env::get("commands"), Env::get("events"), Env::get("interactions")];
+        $listened = [env()->commands, env()->events, env()->interactions];
 
         foreach ($listened as $type => $classes) {
             $typeString = match ($type) {

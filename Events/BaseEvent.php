@@ -2,7 +2,7 @@
 
 namespace Events;
 
-use CommandString\Env\Env;
+use function Common\env;
 
 abstract class BaseEvent
 {
@@ -31,9 +31,9 @@ abstract class BaseEvent
         };
 
         if (static::$runOnce) {
-            Env::get()->discord->once(static::$event, $function);
+            env()->discord->once(static::$event, $function);
         } else {
-            Env::get()->discord->on(static::$event, $function);
+            env()->discord->on(static::$event, $function);
         }
     }
 }

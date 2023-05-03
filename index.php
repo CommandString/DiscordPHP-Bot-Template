@@ -7,9 +7,9 @@
 #    |    |______ |  |  | |_____] |      |_____|    |    |______
 #    |    |______ |  |  | |       |_____ |     |    |    |______
 
-use CommandString\Env\Env;
 use Discord\Discord;
 use Discord\WebSockets\Intents;
+use Common\Env;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
@@ -17,7 +17,7 @@ require_once __DIR__ . "/vendor/autoload.php";
 # |______ | \  |  \  /    |   |_____/ |     | | \  | |  |  | |______ | \  |    |
 # |______ |  \_|   \/   __|__ |    \_ |_____| |  \_| |  |  | |______ |  \_|    |
 
-$env = Env::createFromJsonFile("./env.json");
+$env = Env::createFromEnv(__DIR__ . "/.env");
 
 # ______  _____ _______ _______  _____   ______ ______
 # |     \   |   |______ |       |     | |_____/ |     \

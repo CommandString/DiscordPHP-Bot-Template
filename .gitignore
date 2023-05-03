@@ -1,5 +1,6 @@
 /vendor/*
-env.json
+.env
+!.env.example
 .idea/
 .vscode/
 tools/HelperDocs.md

@@ -4,77 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e40d30d5afbce3a79dc202a892581349",
+    "content-hash": "bdf9e39ce863d8ea350c73325db93f2f",
     "packages": [
-        {
-            "name": "commandstring/env",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CommandString/Env.git",
-                "reference": "6151d79a53e6a9fd620c8fbdfeeb8fd98be12165"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CommandString/Env/zipball/6151d79a53e6a9fd620c8fbdfeeb8fd98be12165",
-                "reference": "6151d79a53e6a9fd620c8fbdfeeb8fd98be12165",
-                "shasum": ""
-            },
-            "require": {
-                "commandstring/utils": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CommandString\\Env\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "CommandString",
-                    "email": "bmxmikey2@gmail.com"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/CommandString/Env/issues",
-                "source": "https://github.com/CommandString/Env/tree/v1.0.1"
-            },
-            "time": "2023-02-15T15:56:21+00:00"
-        },
-        {
-            "name": "commandstring/utils",
-            "version": "v1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CommandString/Utils.git",
-                "reference": "785d0bd5d2aa12ab0b9922ec7e3cbd2e42550300"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CommandString/Utils/zipball/785d0bd5d2aa12ab0b9922ec7e3cbd2e42550300",
-                "reference": "785d0bd5d2aa12ab0b9922ec7e3cbd2e42550300",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CommandString\\Utils\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "support": {
-                "issues": "https://github.com/CommandString/Utils/issues",
-                "source": "https://github.com/CommandString/Utils/tree/v1.4.1"
-            },
-            "time": "2023-01-04T14:41:32+00:00"
-        },
         {
             "name": "discord-php/http",
             "version": "v10.1.7",

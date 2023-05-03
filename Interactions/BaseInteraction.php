@@ -2,7 +2,7 @@
 
 namespace Interactions;
 
-use CommandString\Env\Env;
+use function Common\env;
 use Discord\Discord;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
@@ -37,7 +37,7 @@ abstract class BaseInteraction
                 }
             };
 
-            Env::get()->discord->on(Event::INTERACTION_CREATE, $handler);
+            env()->discord->on(Event::INTERACTION_CREATE, $handler);
         }
 
         self::$listen[static::$id] = static::class;

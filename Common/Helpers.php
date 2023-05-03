@@ -2,7 +2,7 @@
 
 namespace Common;
 
-use CommandString\Env\Env;
+use Common\Env;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
@@ -46,7 +46,7 @@ function newSlashCommandChoice(string $name, float|int|string $value): Choice
  */
 function newDiscordPart(string $class, mixed ...$args): mixed
 {
-    return (new $class(Env::get()->discord, ...$args));
+    return (new $class(env()->discord, ...$args));
 }
 
 /**
@@ -173,5 +173,13 @@ function emptyEmbedField(?Embed $embed = null): array|Embed
  */
 function getDiscord(): Discord
 {
-    return Env::get()->discord;
+    return env()->discord;
+}
+
+/**
+ * Get the Environment instance
+ */
+function env(): Env
+{
+    return Env::get();
 }

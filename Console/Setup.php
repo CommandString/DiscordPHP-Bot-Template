@@ -14,12 +14,28 @@ class Setup extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!file_exists('./env.example.json')) {
+        if (!file_exists('./.env.example')) {
             $output->writeln('<error>Cannot find env.example.json...exiting</error>');
             return Command::FAILURE;
         }
 
-        $template = json_decode(file_get_contents('./env.example.json', true));
+        $exampleEnv = file_get_contents('./.env.example', true);
+        $lines = explode("\n", $exampleEnv);
+
+        $template = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line)) {
+                continue;
+            }
+
+            $parts = explode('=', $line);
+            $key = $parts[0];
+            $value = $parts[1];
+
+            $template[$key] = $value;
+        }
 
         $helper = $this->getHelper('question');
 
@@ -56,8 +72,19 @@ class Setup extends Command
         };
 
         $config = $getConfig($template);
+        $env = '';
 
-        file_put_contents(__DIR__ . '/../env.json', json_encode($config, JSON_PRETTY_PRINT));
+        foreach ($config as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $subKey => $subValue) {
+                    $env .= "{$key}_{$subKey}={$subValue}\n";
+                }
+            } else {
+                $env .= "{$key}={$value}\n";
+            }
+        }
+
+        file_put_contents(__DIR__ . '/../.env', $env);
 
         $output->writeln('<info>Successfully setup environment</info>');
 

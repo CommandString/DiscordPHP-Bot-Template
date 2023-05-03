@@ -2,7 +2,7 @@
 
 namespace Commands;
 
-use CommandString\Env\Env;
+use function Common\env;
 use Discord\Builders\CommandBuilder;
 use Discord\Discord;
 use Discord\Parts\Interactions\Command\Command;
@@ -44,7 +44,7 @@ abstract class BaseCommand
     public static function delete(): ExtendedPromiseInterface
     {
         /** @var Discord $discord */
-        $discord = Env::get()->discord;
+        $discord = env()->discord;
 
         if (static::isGuildCommand()) {
             $commands = await($discord->guilds->get("id", static::$guild)->commands->freshen());
@@ -78,10 +78,10 @@ abstract class BaseCommand
             $config = $config->toArray();
         }
 
-        $command = new Command(Env::get()->discord, $config);
+        $command = new Command(env()->discord, $config);
 
         /** @var Discord $discord */
-        $discord = Env::get()->discord;
+        $discord = env()->discord;
 
         if (static::isGuildCommand()) {
             return $discord->guilds[static::$guild]->commands->save($command);
@@ -93,7 +93,7 @@ abstract class BaseCommand
     public static function listen(): void
     {
         /** @var Discord $discord */
-        $discord = Env::get()->discord;
+        $discord = env()->discord;
 
         $listen = static function (string|array $name) use ($discord) {
             try {

@@ -2,8 +2,7 @@
 
 namespace Console;
 
-
-use CommandString\Env\Env;
+use Common\Env;
 use Discord\Discord;
 use Monolog\Handler\NullHandler;
 use Monolog\Logger;
@@ -47,7 +46,7 @@ class SlashCommands extends Command
             die();
         }
 
-        $env = Env::createFromJsonFile('./env.json');
+        $env = Env::createFromEnv(__DIR__ . "/../.env");
 
         if (file_exists("SlashCommands.log")) {
             unlink("SlashCommands.log");
