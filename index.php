@@ -24,7 +24,7 @@ $env = Env::createFromEnv(__DIR__ . "/.env");
 # |_____/ __|__ ______| |_____  |_____| |    \_ |_____/
 
 $env->discord = new Discord([
-    "token" => $env->token,
+    "token" => $env->TOKEN,
     "intents" => Intents::getDefaultIntents()
 ]);
 
