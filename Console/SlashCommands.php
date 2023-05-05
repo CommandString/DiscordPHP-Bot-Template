@@ -53,7 +53,7 @@ class SlashCommands extends Command
         }
 
         $env->discord = new Discord([
-            'token' => $env->token,
+            'token' => $env->TOKEN,
             'logger' => (new Logger('Logger'))->pushHandler(new NullHandler())
         ]);
 
