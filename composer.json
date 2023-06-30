@@ -1,0 +1,68 @@
+{
+  "name": "commandstring/discordphp-bot-template",
+  "description": "An unofficial way to structure a DPHP Bot",
+  "license": "MIT",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Robert Snedeker",
+      "email": "rsnedeker20@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "commandstring/utils": "^1.7",
+    "react/async": "^4.1",
+    "team-reflex/discord-php": "dev-master",
+    "tnapf/env": "^1.1"
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.31",
+    "fakerphp/faker": "^1.21",
+    "friendsofphp/php-cs-fixer": "^3.16",
+    "jetbrains/phpstorm-attributes": "^1.0",
+    "phpunit/phpunit": "^10.1",
+    "roave/security-advisories": "dev-latest",
+    "xheaven/composer-git-hooks": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Commands\\": "Commands/",
+      "Core\\": "Core/",
+      "Events\\": "Events/"
+    },
+    "files": [
+      "Core/functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Commandstring\\Discordphp-bot-template\\Test\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true
+    },
+    "sort-packages": true
+  },
+  "extra": {
+    "composer-normalize": {
+      "indent-size": 2,
+      "indent-style": "space"
+    },
+    "hooks": {
+      "pre-commit": "composer fix:dry",
+      "pre-push": "composer test"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": "cghooks add --ignore-lock",
+    "post-update-cmd": "cghooks update",
+    "post-autoload-dump": "composer normalize",
+    "fix": "php-cs-fixer fix --using-cache=no",
+    "fix:dry": "php-cs-fixer fix --using-cache=no --diff --dry-run",
+    "test": "phpunit",
+    "test:coverage": "phpunit --coverage-html .phpunit.cache/cov-html"
+  }
+}

@@ -1,0 +1,19 @@
+### PHP-CS-Fixer
+.php-cs-fixer.cache
+.php-cs-fixer.php
+
+### Composer
+composer.phar
+/vendor/
+composer.lock
+
+### JetBrains IDEs
+/.idea/
+
+### VSCode
+/.vscode/
+
+### PHPUnit
+/.phpunit.cache/
+
+.env
