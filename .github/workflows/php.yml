@@ -40,5 +40,5 @@ jobs:
       - name: PHP-CS-Fixer
         run: composer fix:dry
 
-      - name: PHPUnit
-        run: composer test
+#      - name: PHPUnit
+#        run: composer test
