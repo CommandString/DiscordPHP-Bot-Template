@@ -24,9 +24,29 @@ class QueuedCommand
             $command = $command->jsonSerialize();
         }
 
-        var_dump($rCommand, $command);
+        $areTheSame = static function (array $a, array $b) use (&$areTheSame): bool {
+            $ignoreFields = ['default_permission'];
 
-        return false;
+            foreach ($a as $key => $value) {
+                $bValue = $b[$key] ?? null;
+
+                if ($value === $bValue || in_array($key, $ignoreFields)) {
+                    continue;
+                }
+
+                if (is_array($value) && is_array($bValue)) {
+                    if (!$areTheSame($value, $bValue)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        return !$areTheSame($command, $rCommand);
     }
 
     public function setNeedsRegistered(bool $needsRegistered): void

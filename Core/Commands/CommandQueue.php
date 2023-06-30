@@ -33,15 +33,17 @@ class CommandQueue
             $guildCommands = [];
 
             foreach ($this->queue as $command) {
-                $rCommand = $globalCommands->get('name', $command->properties->name);
+                /** @var GlobalCommandRepository|GuildCommandRepository $rCommands */
+                $rCommands = $command->properties->guild === null ?
+                    $globalCommands :
+                    $guildCommands[$command->properties->guild] ??= await($discord->guilds->get('id', $command->properties->guild)->commands->freshen());
 
-                if ($rCommand === null) {
+                $rCommand = $rCommands->get('name', $command->properties->name);
+
+                if ($rCommand === null || $command->hasCommandChanged($rCommand)) {
+                    $discord->getLogger()->info("Command {$command->properties->name} has changed, re-registering it...");
                     $command->setNeedsRegistered(true);
-
-                    continue;
                 }
-
-                $command->hasCommandChanged($rCommand);
             }
 
             $this->loadCommands();
