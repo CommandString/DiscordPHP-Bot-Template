@@ -2,4 +2,8 @@
 
 use Core\Env;
 
-$env = Env::createFromFile(BOT_ROOT.'/.env');
+$env = Env::createAuto();
+
+if (!isset($env->TOKEN)) {
+    throw new RuntimeException('No token supplied to environment!');
+}
