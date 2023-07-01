@@ -27,7 +27,7 @@ return $config->setRiskyAllowed(true)
         // Remove extra spaces in a nullable typehint.
         'compact_nullable_typehint' => true,
         // Concatenation should be spaced according to configuration.
-        'concat_space' => ['spacing' => 'none'],
+        'concat_space' => ['spacing' => 'one'],
         // The PHP constants `true`, `false`, and `null` MUST be written using the correct casing.
         'constant_case' => ['case' => 'lower'],
         // The body of each control structure MUST be enclosed within braces.
