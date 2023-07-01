@@ -1,5 +1,5 @@
 # DiscordPHP Bot Template
-*this is still a work in progress*
+An unofficial way to structure a discordPHP bot.
 
 # Table of Contents
 * [Installation](#installation)
