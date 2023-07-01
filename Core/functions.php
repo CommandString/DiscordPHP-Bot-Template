@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use CommandString\Utils\FileSystemUtils;
 use Discord\Builders\Components\ActionRow;
 use Discord\Builders\Components\Button;
 use Discord\Builders\MessageBuilder;
@@ -11,6 +12,9 @@ use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Option;
 use Discord\Parts\Interactions\Interaction;
 use LogicException;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Returns the Env instance
@@ -171,4 +175,36 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
     }
 
     return $option;
+}
+
+/**
+ * Loop through all the classes in a directory and call a callback function with the class name
+ */
+function loopClasses(string $directory, callable $callback): void
+{
+    $convertPathToNamespace = static fn (string $path): string => str_replace([realpath(BOT_ROOT), '/'], ['', '\\'], $path);
+
+    foreach (FileSystemUtils::getAllFilesWithExtensions($directory, ['php']) as $file) {
+        $className = basename($file, '.php');
+        $path = dirname($file);
+        $namespace = $convertPathToNamespace($path);
+        $className = $namespace . '\\' . $className;
+
+        $callback($className);
+    }
+}
+
+/**
+ * @template T
+ *
+ * @param class-string $class
+ * @param class-string<T> $attribute
+ *
+ * @throws ReflectionException
+ *
+ * @return T|false
+ */
+function doesClassHaveAttribute(string $class, string $attribute): object|false
+{
+    return (new ReflectionClass($class))->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF)[0] ?? false;
 }
