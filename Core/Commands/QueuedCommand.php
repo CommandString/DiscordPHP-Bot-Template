@@ -22,6 +22,8 @@ class QueuedCommand
             $className = get_class($this->handler);
             throw new LogicException("Command {$className} has no name");
         }
+
+        $this->name = $name;
     }
 
     public function hasCommandChanged(DiscordCommand $rCommand): bool
