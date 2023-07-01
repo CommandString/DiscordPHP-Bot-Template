@@ -11,7 +11,8 @@ Env::get()->discord = new Discord([
     'intents' => Intents::getAllIntents(),
 ]);
 
+require_once BOT_ROOT . '/Bootstrap/Events.php';
+
 d()->on('init', static function (Discord $discord) {
-    require_once BOT_ROOT.'/Bootstrap/Commands.php';
-    //    require_once BOT_ROOT . '/Bootstrap/Events.php';
+    require_once BOT_ROOT . '/Bootstrap/Commands.php';
 });
