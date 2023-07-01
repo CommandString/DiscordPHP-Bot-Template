@@ -57,15 +57,27 @@ class CommandQueue
         foreach ($this->queue as $command) {
             $discord->listenCommand($command->properties->name, $command->handler->handle(...), $command->handler->autocomplete(...));
 
-            if ($command->needsRegistered()) {
-                $discord->application->commands->save(
-                    $discord->application->commands->create(
-                        $command->handler->getConfig()->toArray()
-                    )
-                )->otherwise(static function (Throwable $e) use ($discord, $command) {
-                    $discord->getLogger()->error("Failed to register command {$command->properties->name}: {$e->getMessage()}");
-                });
+            if (!$command->needsRegistered()) {
+                continue;
             }
+
+            $commands = $command->properties->guild === null ?
+                $discord->application->commands :
+                $discord->guilds->get('id', $command->properties->guild)?->commands ?? null;
+
+            if ($commands === null) {
+                $discord->getLogger()->error("Failed to register command {$command->properties->name}: Guild {$command->properties->guild} not found");
+
+                continue;
+            }
+
+            $commands->save(
+                $commands->create(
+                    $command->handler->getConfig()->toArray()
+                )
+            )->otherwise(static function (Throwable $e) use ($discord, $command) {
+                $discord->getLogger()->error("Failed to register command {$command->properties->name}: {$e->getMessage()}");
+            });
         }
     }
 }
