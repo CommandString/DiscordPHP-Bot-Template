@@ -29,16 +29,12 @@
     "psr-4": {
       "Commands\\": "Commands/",
       "Core\\": "Core/",
-      "Events\\": "Events/"
+      "Events\\": "Events/",
+      "Tests\\": "Tests/"
     },
     "files": [
       "Core/functions.php"
     ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Commandstring\\Discordphp-bot-template\\Test\\": "tests/"
-    }
   },
   "config": {
     "allow-plugins": {
