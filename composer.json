@@ -1,5 +1,5 @@
 {
-  "name": "commandstring/discordphp-bot-template",
+  "name": "commandstring/dphp-bot",
   "description": "An unofficial way to structure a DPHP Bot",
   "license": "MIT",
   "type": "project",
