@@ -56,6 +56,7 @@ class CommandQueue
 
         foreach ($this->queue as $command) {
             $discord->listenCommand($command->name, $command->handler->handle(...), $command->handler->autocomplete(...));
+            $discord->getLogger()->debug("Loaded command {$command->name}");
 
             if (!$command->needsRegistered()) {
                 continue;
