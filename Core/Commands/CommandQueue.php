@@ -38,10 +38,10 @@ class CommandQueue
                     $globalCommands :
                     $guildCommands[$command->properties->guild] ??= await($discord->guilds->get('id', $command->properties->guild)->commands->freshen());
 
-                $rCommand = $rCommands->get('name', $command->properties->name);
+                $rCommand = $rCommands->get('name', $command->name);
 
                 if ($rCommand === null || $command->hasCommandChanged($rCommand)) {
-                    $discord->getLogger()->info("Command {$command->properties->name} has changed, re-registering it...");
+                    $discord->getLogger()->info("Command {$command->name} has changed, re-registering it...");
                     $command->setNeedsRegistered(true);
                 }
             }
@@ -55,7 +55,7 @@ class CommandQueue
         $discord = discord();
 
         foreach ($this->queue as $command) {
-            $discord->listenCommand($command->properties->name, $command->handler->handle(...), $command->handler->autocomplete(...));
+            $discord->listenCommand($command->name, $command->handler->handle(...), $command->handler->autocomplete(...));
 
             if (!$command->needsRegistered()) {
                 continue;
@@ -66,7 +66,7 @@ class CommandQueue
                 $discord->guilds->get('id', $command->properties->guild)?->commands ?? null;
 
             if ($commands === null) {
-                $discord->getLogger()->error("Failed to register command {$command->properties->name}: Guild {$command->properties->guild} not found");
+                $discord->getLogger()->error("Failed to register command {$command->name}: Guild {$command->properties->guild} not found");
 
                 continue;
             }
@@ -76,7 +76,7 @@ class CommandQueue
                     $command->handler->getConfig()->toArray()
                 )
             )->otherwise(static function (Throwable $e) use ($discord, $command) {
-                $discord->getLogger()->error("Failed to register command {$command->properties->name}: {$e->getMessage()}");
+                $discord->getLogger()->error("Failed to register command {$command->name}: {$e->getMessage()}");
             });
         }
     }

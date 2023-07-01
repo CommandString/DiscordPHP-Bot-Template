@@ -34,7 +34,7 @@ use Discord\Parts\Interactions\Interaction;
 
 use function Core\messageWithContent;
 
-#[Command('ping')]
+#[Command]
 class Ping implements CommandHandler
 {
     public function handle(Interaction $interaction): void

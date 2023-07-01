@@ -4,15 +4,24 @@ namespace Core\Commands;
 
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command as DiscordCommand;
+use LogicException;
 
 class QueuedCommand
 {
     protected bool $needsRegistered = false;
 
+    public readonly string $name;
+
     public function __construct(
         public readonly Command $properties,
         public readonly CommandHandler $handler
     ) {
+        $name = $this->handler->getConfig()->toArray()['name'] ?? null;
+
+        if ($name === null) {
+            $className = get_class($this->handler);
+            throw new LogicException("Command {$className} has no name");
+        }
     }
 
     public function hasCommandChanged(DiscordCommand $rCommand): bool
