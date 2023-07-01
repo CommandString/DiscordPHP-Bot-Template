@@ -6,6 +6,7 @@
 * [Configuration](#configuration)
 * [Slash Commands](#slash-commands)
 * [Events](#events)
+* [Disabling Commands and Events](#disabling-commands-and-events)
 
 # Installation
 
@@ -77,5 +78,26 @@ class Ready implements Init
         echo "Bot is ready!\n";
     }
 }
+```
 
+# Disabling Commands and Events
+
+If you want to disable a command handler or event listener attach the `Core\Commands\Disabled` attribute to it.
+
+```php
+<?php
+
+namespace Events;
+
+use Core\Events\Init;
+use Discord\Discord;
+
+#[Disabled]
+class Ready implements Init
+{
+    public function handle(Discord $discord): void
+    {
+        echo "Bot is ready!\n";
+    }
+}
 ```
