@@ -4,11 +4,15 @@ use Core\Commands\Command;
 use Core\Commands\CommandQueue;
 use Core\Commands\QueuedCommand;
 use Core\Disabled;
+use Core\HMR\HotCommand;
+use React\EventLoop\Loop;
 
+use function Core\discord;
 use function Core\doesClassHaveAttribute;
 use function Core\loopClasses;
 
 $commandQueue = new CommandQueue();
+$discord = discord();
 loopClasses(BOT_ROOT . '/Commands', static function (string $className) use ($commandQueue) {
     $attribute = doesClassHaveAttribute($className, Command::class);
     $disabled = doesClassHaveAttribute($className, Disabled::class);
@@ -22,4 +26,23 @@ loopClasses(BOT_ROOT . '/Commands', static function (string $className) use ($co
         new $className()
     ));
 });
-$commandQueue->runQueue();
+
+$commandQueue->runQueue()->then(static function (array $commands) {
+    foreach ($commands as $name => &$command) {
+        $file = BOT_ROOT . '\\' . $command[0]->handler::class . '.php';
+
+        $command = new HotCommand(
+            $name,
+            $command[1],
+            $file
+        );
+    }
+
+    Loop::addTimer(1, static function () use ($commands) {
+        foreach ($commands as $command) {
+            $command->on(HotCommand::EVENT_HAS_CHANGED, static function (HotCommand $command) {
+                $command->reload();
+            });
+        }
+    });
+})->otherwise(static fn (Throwable $e) => $discord->getLogger()->error($e->getMessage()));
