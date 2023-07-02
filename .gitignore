@@ -16,4 +16,7 @@ composer.lock
 ### PHPUnit
 /.phpunit.cache/
 
+
+### Misc
 .env
+Core/HMR/Cached
