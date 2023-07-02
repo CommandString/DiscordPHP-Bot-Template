@@ -190,7 +190,7 @@ function loopClasses(string $directory, callable $callback): void
         $namespace = $convertPathToNamespace($path);
         $className = $namespace . '\\' . $className;
 
-        $callback($className);
+        $callback($className, $file, $namespace, $path);
     }
 }
 
