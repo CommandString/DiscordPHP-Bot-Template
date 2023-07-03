@@ -2,9 +2,6 @@
 
 namespace Database;
 
-use Core\Database\DatabaseInterface;
-
-
 class PostgreSQLServiceProvider extends SqlCompatibleDatabaseProvider
 {
     protected function getDsn()

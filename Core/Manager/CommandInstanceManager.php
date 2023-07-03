@@ -4,14 +4,17 @@ namespace Core\Manager;
 
 use Core\Commands\DynamicCommandInterface;
 
-class CommandInstanceManager {
+class CommandInstanceManager
+{
     private $commandInstances = [];
 
-    public function addCommand(DynamicCommandInterface $command): void {
+    public function addCommand(DynamicCommandInterface $command): void
+    {
         $this->commandInstances[] = $command;
     }
 
-    public function cleanupCommands(): void {
+    public function cleanupCommands(): void
+    {
         $currentTime = time();
         foreach ($this->commandInstances as $key => $command) {
             if ($command->isCommandExpired()) {

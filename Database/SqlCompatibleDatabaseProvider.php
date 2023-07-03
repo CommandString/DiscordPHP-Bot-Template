@@ -3,15 +3,16 @@
 namespace Database;
 
 use PDO;
-
 use Core\Database\DatabaseInterface;
-
 
 abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
 {
     protected $host;
+
     protected $username;
+
     protected $password;
+
     protected $database;
 
     protected $connection;

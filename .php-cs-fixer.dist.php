@@ -1,5 +1,7 @@
 <?php
 
+require_once "vendor/autoload.php";
+
 $config = new PhpCsFixer\Config();
 
 return $config->setRiskyAllowed(true)

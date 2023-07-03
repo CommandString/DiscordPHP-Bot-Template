@@ -7,9 +7,13 @@ use Core\Database\DatabaseInterface;
 class MongoDBServiceProvider implements DatabaseInterface
 {
     private $host;
+
     private $port;
+
     private $database;
+
     private $collection;
+
     private $connection;
 
     public function __construct($host, $port, $database, $collection)
@@ -28,6 +32,7 @@ class MongoDBServiceProvider implements DatabaseInterface
     public function query($filter)
     {
         $collection = $this->connection->selectCollection($this->database, $this->collection);
+
         return $collection->findOne($filter);
     }
 

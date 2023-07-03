@@ -2,9 +2,6 @@
 
 namespace Database;
 
-use Core\Database\DatabaseInterface;
-
-
 class MySQLServiceProvider extends SqlCompatibleDatabaseProvider
 {
     protected function getDsn()

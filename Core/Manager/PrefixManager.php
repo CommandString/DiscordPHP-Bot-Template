@@ -7,6 +7,7 @@ use Core\Database\DatabaseInterface;
 class PrefixManager
 {
     private $cache = [];
+
     private $database;
 
     public function __construct(DatabaseInterface $database)
