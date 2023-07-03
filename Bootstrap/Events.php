@@ -38,7 +38,6 @@ loopClasses(BOT_ROOT . '/Events', static function (string $className) use ($even
         if ($eventName === null) {
             continue;
         }
-
         $discord->on($eventName, $event->handle(...));
     }
 });
