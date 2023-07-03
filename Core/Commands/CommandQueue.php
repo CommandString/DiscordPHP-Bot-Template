@@ -2,8 +2,11 @@
 
 namespace Core\Commands;
 
+use Discord\Helpers\RegisteredCommand;
 use Discord\Repository\Guild\GuildCommandRepository;
 use Discord\Repository\Interaction\GlobalCommandRepository;
+use React\Promise\Promise;
+use React\Promise\PromiseInterface;
 use Throwable;
 
 use function Core\discord;
@@ -20,42 +23,50 @@ class CommandQueue
         $this->queue[] = $command;
     }
 
-    public function runQueue(): void
+    /**
+     * @return PromiseInterface<RegisteredCommand[]>
+     */
+    public function runQueue(): PromiseInterface
     {
         $discord = discord();
         $discord->getLogger()->info('Running command queue...');
 
-        async(function () use ($discord) {
-            /** @var GlobalCommandRepository $globalCommands */
-            $globalCommands = await($discord->application->commands->freshen());
+        return new Promise(function ($resolve, $reject) use ($discord) {
+            async(function () use ($discord, $resolve) {
+                /** @var GlobalCommandRepository $globalCommands */
+                $globalCommands = await($discord->application->commands->freshen());
 
-            /** @var GuildCommandRepository[] $guildCommands */
-            $guildCommands = [];
+                /** @var GuildCommandRepository[] $guildCommands */
+                $guildCommands = [];
 
-            foreach ($this->queue as $command) {
-                /** @var GlobalCommandRepository|GuildCommandRepository $rCommands */
-                $rCommands = $command->properties->guild === null ?
-                    $globalCommands :
-                    $guildCommands[$command->properties->guild] ??= await($discord->guilds->get('id', $command->properties->guild)->commands->freshen());
+                foreach ($this->queue as $command) {
+                    /** @var GlobalCommandRepository|GuildCommandRepository $rCommands */
+                    $rCommands = $command->properties->guild === null ?
+                        $globalCommands :
+                        $guildCommands[$command->properties->guild] ??= await($discord->guilds->get('id', $command->properties->guild)->commands->freshen());
 
-                $rCommand = $rCommands->get('name', $command->name);
+                    $rCommand = $rCommands->get('name', $command->name);
 
-                if ($rCommand === null || $command->hasCommandChanged($rCommand)) {
-                    $discord->getLogger()->info("Command {$command->name} has changed, re-registering it...");
-                    $command->setNeedsRegistered(true);
+                    if ($rCommand === null || $command->hasCommandChanged($rCommand)) {
+                        $discord->getLogger()->info("Command {$command->name} has changed, re-registering it...");
+                        $command->setNeedsRegistered(true);
+                    }
                 }
-            }
 
-            $this->loadCommands();
-        })();
+                $commands = $this->loadCommands();
+
+                $resolve($commands);
+            })();
+        });
     }
 
-    protected function loadCommands(): void
+    protected function loadCommands(): array
     {
         $discord = discord();
+        $registeredCommands = [];
 
         foreach ($this->queue as $command) {
-            $discord->listenCommand($command->name, $command->handler->handle(...), $command->handler->autocomplete(...));
+            $registeredCommands[$command->name] = [$command, $discord->listenCommand($command->name, $command->handler->handle(...), $command->handler->autocomplete(...))];
             $discord->getLogger()->debug("Loaded command {$command->name}");
 
             if (!$command->needsRegistered()) {
@@ -80,5 +91,7 @@ class CommandQueue
                 $discord->getLogger()->error("Failed to register command {$command->name}: {$e->getMessage()}");
             });
         }
+
+        return $registeredCommands;
     }
 }

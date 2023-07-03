@@ -14,7 +14,7 @@ class Ping implements CommandHandler
 {
     public function handle(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(messageWithContent('Ping :ping_pong:'), true);
+        $interaction->respondWithMessage(messageWithContent('Pong :ping_pong:'), true);
     }
 
     public function autocomplete(Interaction $interaction): void
