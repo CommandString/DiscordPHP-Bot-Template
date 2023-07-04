@@ -14,6 +14,17 @@ An unofficial way to structure a discordPHP bot.
 composer create-project commandstring/dphp-bot
 ```
 
+# Important Resources #
+
+[DiscordPHP Class Reference](https://discord-php.github.io/DiscordPHP/guide/)
+
+[DiscordPHP Documentation](https://discord-php.github.io/DiscordPHP/)
+
+[DiscordPHP Discord Server](https://discord.gg/kM7wrJUYU9)
+*Only ask questions relevant to using DiscordPHP's own wrapper, not on how to use this.*
+
+#[Developer Hub]()
+
 # Configuration
 
 Copy the `.env.example` file to `.env` and add your bot token.
