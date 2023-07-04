@@ -15,6 +15,7 @@ use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
+use Stringable;
 
 /**
  * Returns the Env instance
@@ -177,6 +178,30 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
     return $option;
 }
 
+// Logging Functions
+
+function log($level, string|Stringable $message, array $context = []): void
+{
+    env()->discord->getLogger()->log($level, $message, $context);
+}
+
+function debug(string|Stringable $message, array $context = []): void
+{
+    env()->discord->getLogger()->debug($message, $context);
+}
+
+function error(string|Stringable $message, array $context = []): void
+{
+    env()->discord->getLogger()->error($message, $context);
+}
+
+function info(string|Stringable $message, array $context = []): void
+{
+    env()->discord->getLogger()->info($message, $context);
+}
+
+// Internal Functions //
+
 /**
  * Loop through all the classes in a directory and call a callback function with the class name
  */
@@ -190,7 +215,7 @@ function loopClasses(string $directory, callable $callback): void
         $namespace = $convertPathToNamespace($path);
         $className = $namespace . '\\' . $className;
 
-        $callback($className, $file, $namespace, $path);
+        $callback($className, $namespace, $file, $path);
     }
 }
 
@@ -207,4 +232,15 @@ function loopClasses(string $directory, callable $callback): void
 function doesClassHaveAttribute(string $class, string $attribute): object|false
 {
     return (new ReflectionClass($class))->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF)[0] ?? false;
+}
+
+function deleteAllFilesInDirectory(string $directory): void
+{
+    if (is_dir($directory) === false) {
+        return;
+    }
+
+    foreach (FileSystemUtils::getAllFiles($directory) as $file) {
+        unlink($file);
+    }
 }
