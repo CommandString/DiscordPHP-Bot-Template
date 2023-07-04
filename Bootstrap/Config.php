@@ -1,7 +1,4 @@
 <?php
 
-use DegenerateZan\Utils\ExceptionHandler\ZanErrorHandler;
-use DegenerateZan\Utils\ExceptionHandler\ZanExceptionHandler;
-
-set_exception_handler([ZanExceptionHandler::class, 'handle']);
-set_error_handler([ZanErrorHandler::class, 'handle']);
+set_exception_handler([DegenerateZan\Utils\ExceptionHandler\ZanExceptionHandler::class, 'handle']);
+define('DUMP_STACK_TRACE', false);

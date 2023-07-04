@@ -1,6 +1,6 @@
 <?php
 
-namespace Commands;
+namespace Commands\Slash;
 
 use Core\Commands\Command;
 use Core\Commands\CommandHandler;

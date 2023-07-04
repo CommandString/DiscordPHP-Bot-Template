@@ -2,13 +2,18 @@
 
 namespace Core\Manager;
 
-use Core\Commands\DynamicCommandInterface;
+use Core\Commands\DynamicCommand;
 
 class CommandInstanceManager
 {
+    /**
+     * commandInstances
+     *
+     * @var object
+     */
     private $commandInstances = [];
 
-    public function addCommand(DynamicCommandInterface $command): void
+    public function addCommand(DynamicCommand $command): void
     {
         $this->commandInstances[] = $command;
     }

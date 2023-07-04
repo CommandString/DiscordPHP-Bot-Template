@@ -46,6 +46,13 @@ function discord(): Discord
     return env()->discord;
 }
 
+function getFilePathFromClass($className)
+{
+    $reflection = new \ReflectionClass($className);
+
+    return $reflection->getFileName();
+}
+
 /**
  * Create a new MessageBuilder object with the content define for creating simple MessageBuilders quickly
  *

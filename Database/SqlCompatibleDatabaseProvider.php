@@ -4,10 +4,13 @@ namespace Database;
 
 use PDO;
 use Core\Database\DatabaseInterface;
+use Core\Env;
 
 abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
 {
     protected $host;
+
+    protected $port;
 
     protected $username;
 
@@ -17,18 +20,25 @@ abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
 
     protected $connection;
 
-    public function __construct($host, $username, $password, $database)
+    public function __construct()
     {
-        $this->host = $host;
-        $this->username = $username;
-        $this->password = $password;
-        $this->database = $database;
+        $this->host = Env::get()->HOST;
+        $this->username = Env::get()->USERNAME;
+        $this->password = Env::get()->PASSWORD;
+        $this->database = Env::get()->DATABASE;
+        $this->port = Env::get()->PORTt;
+
     }
 
     public function connect()
     {
-        $this->connection = new PDO($this->getDsn(), $this->username, $this->password);
-        // TODO Additional connection settings and error handling must added here
+        $dsn = $this->getDsn();
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            // Add additional connection options here if needed
+        ];
+
+        $this->connection = new PDO($dsn, $this->username, $this->password, $options);
     }
 
     abstract protected function getDsn();
