@@ -3,7 +3,6 @@
 namespace Events;
 
 use Core\Commands\DynamicCommand;
-use Core\Commands\DynamicCommandInterface;
 use Core\Events\MessageCreate;
 use Core\Manager\CommandInstanceManager;
 use Core\Manager\PrefixManager;
@@ -53,7 +52,7 @@ class Message implements MessageCreate
         }
     }
 
-    private function handleCommand(ChannelMessage $message, string $commandName): ?DynamicCommandInterface
+    private function handleCommand(ChannelMessage $message, string $commandName): ?DynamicCommand
     {
         $command = $this->commandCollection->get($commandName);
 
@@ -82,7 +81,7 @@ class Message implements MessageCreate
         $callable($message);
     }
 
-    private function executeDynamicCommand(DynamicCommandInterface $commandInstance, string $methodName, ChannelMessage $message): void
+    private function executeDynamicCommand(DynamicCommand $commandInstance, string $methodName, ChannelMessage $message): void
     {
         $commandInstance->$methodName($message);
     }
