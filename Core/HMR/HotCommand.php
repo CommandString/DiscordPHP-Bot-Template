@@ -37,16 +37,33 @@ class HotCommand extends EventEmitter
             debug('Hot Command Changed: ' . $this->name);
             $this->reload();
         });
+
+        $this->checkCacheDir();
+    }
+
+    protected function checkCacheDir(): void
+    {
+        $cacheDir = $this->getCacheDir();
+        if (!file_exists($cacheDir)) {
+            discord()->getLogger()->warning("Cache directory '{$cacheDir}' does not exist. Creating directory...");
+            mkdir($cacheDir, 0777, true);
+        }
+    }
+
+    protected function getCacheDir(): string
+    {
+        return BOT_ROOT . '/Core/HMR/Cached/';
     }
 
     protected function createCachedScript(): bool
     {
         $className = GeneratorUtils::uuid(8, range('a', 'z'));
-        $temp = BOT_ROOT . '/Core/HMR/Cached/' . $className . '.php';
+
+        $temp = $this->getCacheDir() . $className . '.php';
         $contents = preg_replace('/class\s+([a-zA-Z0-9_]+)/', 'class ' . $className, $this->file->getContents());
         $contents = preg_replace('/namespace\s+([a-zA-Z0-9_\\\\]+)/', 'namespace Core\\HMR\\Cached', $contents);
-
         $this->cachedScript?->deleteCachedFile();
+        $this->checkCacheDir($this->getCacheDir());
         file_put_contents($temp, $contents);
         $this->cachedScript = new HotCache($className, $temp);
         try {
@@ -91,10 +108,13 @@ class HotCommand extends EventEmitter
         (new CommandQueue())->appendCommand(new QueuedCommand(
             $attribute->newInstance(),
             $command
-        ))->runQueue()->then(static function () {
-            info('Reran Command Queue');
-        }, static function (Throwable $e) {
-            error('Failed to run command queue: ' . $e);
-        });
+        ))->runQueue()->then(
+            static function () {
+                info('Reran Command Queue');
+            },
+            static function (Throwable $e) {
+                error('Failed to run command queue: ' . $e);
+            }
+        );
     }
 }
