@@ -109,11 +109,9 @@ class HotCommand extends EventEmitter
             $attribute->newInstance(),
             $command
         ))->runQueue()->then(
-            static function () {
-                info('Reran Command Queue');
-            },
-            static function (Throwable $e) {
-                error('Failed to run command queue: ' . $e);
+            static fn () => info('Reran Command Queue'),
+            
+            static fn (Throwable $e) => error('Failed to run command queue: ' . $e);
             }
         );
     }
