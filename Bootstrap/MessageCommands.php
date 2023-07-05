@@ -31,7 +31,7 @@ foreach ($msgCommands as $commandName => $value) {
     }
 
     $filePath = getFilePathFromClass($className);
-    $commandCollection->addHotCommand($commandName, $value, new HotMessageCommand($filePath));
+    $commandCollection->addHotCommand($commandName, $value, new HotMessageCommand( $commandName ,$filePath));
 }
 
 System::get()->cmdCollection = $commandCollection;

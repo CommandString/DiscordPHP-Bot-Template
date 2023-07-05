@@ -3,8 +3,10 @@
 namespace Core\HMR;
 
 use CommandString\Utils\GeneratorUtils;
+use Throwable;
 
 use function Core\debug;
+use function Core\discord;
 
 class HotMessageCommand
 {
@@ -13,18 +15,19 @@ class HotMessageCommand
     protected HotFile $file;
 
     public function __construct(
+        public readonly string $name,
         public readonly string $filePath
     ) {
         $this->file = new HotFile($filePath);
 
-        $this->file->on(HotFile::EVENT_HAS_CHANGED, function () {
+        $this->file->on(HotFile::EVENT_CHANGED, function () {
             $this->reload();
         });
 
         $this->createCachedScript();
     }
 
-    protected function createCachedScript(): void
+    protected function createCachedScript(): bool
     {
         $className = GeneratorUtils::uuid(8, range('a', 'z'));
         $temp = BOT_ROOT . '/Core/HMR/' . $className . '.php';
@@ -34,7 +37,15 @@ class HotMessageCommand
         $this->cachedScript?->deleteCachedFile();
         file_put_contents($temp, $contents);
         $this->cachedScript = new HotCache($className, $temp);
-        require $temp;
+        try {
+            require $temp;
+
+            return true;
+        } catch (Throwable $e) {
+            discord()->getLogger()->error($e);
+
+            return false;
+        }
     }
 
     public function getInstance()
