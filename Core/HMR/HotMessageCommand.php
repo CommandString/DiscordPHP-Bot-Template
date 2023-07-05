@@ -4,6 +4,8 @@ namespace Core\HMR;
 
 use CommandString\Utils\GeneratorUtils;
 
+use function Core\debug;
+
 class HotMessageCommand
 {
     protected ?HotCache $cachedScript = null;
@@ -43,7 +45,14 @@ class HotMessageCommand
 
     public function reload(): void
     {
-        $this->createCachedScript();
+        if ($this->createCachedScript() === false) {
+            debug('Failed to create cached script: ' . $this->name);
+
+            return;
+        }
+
+        debug('Created Cached Script: ' . $this->name);
+
 
         // $this->emit(self::EVENT_RELOAD, [$this]);
     }

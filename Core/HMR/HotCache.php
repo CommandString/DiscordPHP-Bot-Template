@@ -2,6 +2,10 @@
 
 namespace Core\HMR;
 
+use Throwable;
+
+use function Core\discord;
+
 class HotCache
 {
     public readonly string $fqn;
@@ -13,9 +17,15 @@ class HotCache
         $this->fqn = '\\Core\\HMR\\Cached\\' . $className;
     }
 
-    public function createInstance(): object
+    public function createInstance(): ?object
     {
-        return new $this->fqn();
+        try {
+            return new $this->fqn();
+        } catch (Throwable $e) {
+            discord()->getLogger()->error($e);
+
+            return null;
+        }
     }
 
     public function deleteCachedFile(): void

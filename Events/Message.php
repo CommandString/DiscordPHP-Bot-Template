@@ -8,6 +8,7 @@ use Core\Manager\CommandInstanceManager;
 use Core\Manager\PrefixManager;
 use Core\System;
 use Discord\Builders\MessageBuilder;
+use Discord\Discord;
 use Discord\Parts\Channel\Message as ChannelMessage;
 use Discord\Parts\Embed\Embed;
 use LogicException;
@@ -30,7 +31,7 @@ class Message implements MessageCreate
         $this->commandCollection = System::get()->cmdCollection;
     }
 
-    public function handle(ChannelMessage $message): void
+    public function handle(ChannelMessage $message, Discord $discord): void
     {
         $this->commandInstanceManager->cleanupCommands();
 
