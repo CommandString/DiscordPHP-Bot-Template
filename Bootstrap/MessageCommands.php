@@ -4,8 +4,8 @@ namespace Core\Commands;
 
 use Commands\Message\Ping;
 use Core\HMR\HotMessageCommand;
-use Core\Commands\CommandCollection;
 use Core\System;
+use Core\Disabled;
 
 use function Core\doesClassHaveAttribute;
 use function Core\getFilePathFromClass;
@@ -21,22 +21,22 @@ use function Core\getFilePathFromClass;
 //         ],
 //         "method" => "sendHelp",
 //         "instance" => null,
-//     ],   
+//     ],
 //     // Other commands...
 // ];
 
 $msgCommands = [
-    "ping" => [
-        "className" => Ping::class,
-        "method" => "sendPing",
-        "instance" => null
-    ]
-    ];
+    'ping' => [
+        'className' => Ping::class,
+        'method' => 'sendPing',
+        'instance' => null,
+    ],
+];
 
 $commandCollection = new CommandCollection();
 
 foreach ($msgCommands as $commandName => $value) {
-    $className = $value["className"];
+    $className = $value['className'];
     $attribute = doesClassHaveAttribute($className, MessageCommand::class);
     $disabled = doesClassHaveAttribute($className, Disabled::class);
 
@@ -45,7 +45,7 @@ foreach ($msgCommands as $commandName => $value) {
     }
 
     $filePath = getFilePathFromClass($className);
-    $commandCollection->addHotCommand($commandName, $value, new HotMessageCommand($commandName ,$filePath));
+    $commandCollection->addHotCommand($commandName, $value, new HotMessageCommand($commandName, $filePath));
 }
 
 System::get()->cmdCollection = $commandCollection;

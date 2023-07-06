@@ -30,7 +30,7 @@ class HotMessageCommand
     protected function createCachedScript(): bool
     {
         $className = GeneratorUtils::uuid(8, range('a', 'z'));
-        $temp = BOT_ROOT . '/Core/HMR/' . $className . '.php';
+        $temp = BOT_ROOT . '/Core/HMR/Cached/' . $className . '.php';
         $contents = preg_replace('/class\s+([a-zA-Z0-9_]+)/', 'class ' . $className, $this->file->getContents());
         $contents = preg_replace('/namespace\s+([a-zA-Z0-9_\\\\]+)/', 'namespace Core\\HMR\\Cached', $contents);
 
@@ -48,7 +48,7 @@ class HotMessageCommand
         }
     }
 
-    public function getInstance()
+    public function createInstance()
     {
 
         return $this->cachedScript->createInstance();
@@ -63,7 +63,6 @@ class HotMessageCommand
         }
 
         debug('Created Cached Script: ' . $this->name);
-
 
         // $this->emit(self::EVENT_RELOAD, [$this]);
     }

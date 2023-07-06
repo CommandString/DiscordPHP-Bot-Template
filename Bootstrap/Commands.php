@@ -6,7 +6,6 @@ use Core\Commands\QueuedCommand;
 use Core\Disabled;
 use Core\HMR\HotCommand;
 
-use function Core\debug;
 use function Core\discord;
 use function Core\doesClassHaveAttribute;
 use function Core\loopClasses;

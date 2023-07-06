@@ -57,12 +57,10 @@ class Message implements MessageCreate
     {
         $command = $this->commandCollection->get($commandName);
 
-        $instance = $command->instance->getInstance();
+        if ($command->instance instanceof DynamicCommand) {
+            $this->executeDynamicCommand($command->instance, $command->method, $message);
 
-        if ($instance instanceof DynamicCommand) {
-            $this->executeDynamicCommand($instance, $command->method, $message);
-
-            return $instance;
+            return $command->instance;
         }
 
         $className = $command->class;
@@ -97,10 +95,10 @@ class Message implements MessageCreate
             ->setColor('#FF0000') // Set color to red using hexadecimal value
             ->setFooter($discord->username)
             ->setTimestamp()
-            ->addField('Type', get_class($e))
-            ->addField('Message', $e->getMessage())
-            ->addField('File', $e->getFile())
-            ->addField('Line', $e->getLine());
+            ->addField(['name' => 'Type', 'value' => get_class($e)])
+            ->addField(['name' => 'Message', 'value' => $e->getMessage()])
+            ->addField(['name' => 'File', 'value' => $e->getFile()])
+            ->addField(['name' => 'Line', 'value' => $e->getLine()]);
 
         $message->reply(MessageBuilder::new()->addEmbed($embed));
     }

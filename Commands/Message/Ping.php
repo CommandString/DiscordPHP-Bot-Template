@@ -15,7 +15,7 @@ class Ping extends BaseDynamicCommand
         $this->addTimeLimit(1);
     }
 
-    public function sayHello(Message $message)
+    public function sendPing(Message $message)
     {
         $message->reply('pong!');
     }
