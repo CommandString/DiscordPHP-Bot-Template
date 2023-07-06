@@ -19,5 +19,4 @@ composer.lock
 
 ### Misc
 .env
-./Core/HMR/Cached/*
-
+Core/HMR/Cached

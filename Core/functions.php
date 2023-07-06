@@ -9,7 +9,9 @@ use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Interactions\Command\Option;
+use Discord\Parts\Interactions\Command\Choice;
+use Discord\Parts\Interactions\Command\Option as CommandOption;
+use Discord\Parts\Interactions\Request\Option;
 use Discord\Parts\Interactions\Interaction;
 use LogicException;
 use ReflectionAttribute;
@@ -38,10 +40,10 @@ function env(): Env
  *
  * @throws LogicException if the Discord instance is not set
  */
-function discord(): Discord
+function discord(): ?Discord
 {
     if (!isset(env()->discord)) {
-        throw new LogicException('Discord is not set');
+        return null;
     }
 
     return env()->discord;
@@ -52,6 +54,28 @@ function getFilePathFromClass($className)
     $reflection = new \ReflectionClass($className);
 
     return $reflection->getFileName();
+}
+
+/**
+ * Create a new Option used for building slash commands
+ */
+function newSlashCommandOption(string $name, string $description, int $type, bool $required = false): CommandOption
+{
+    return newDiscordPart(CommandOption::class)
+        ->setName($name)
+        ->setDescription($description)
+        ->setType($type)
+        ->setRequired($required);
+}
+
+/**
+ * Create a new Choice used for building slash commands
+ */
+function newSlashCommandChoice(string $name, float|int|string $value): Choice
+{
+    return newDiscordPart(Choice::class)
+        ->setName($name)
+        ->setValue($value);
 }
 
 /**

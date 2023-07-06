@@ -1,12 +1,16 @@
 # DiscordPHP Bot Template
+
 An unofficial way to structure a discordPHP bot.
 
 # Table of Contents
+
 * [Installation](#installation)
+* [Important Resources](#important-resources)
 * [Configuration](#configuration)
 * [Slash Commands](#slash-commands)
 * [Events](#events)
 * [Disabling Commands and Events](#disabling-commands-and-events)
+* [Hot Reloading](#hot-reloading)
 
 # Installation
 
@@ -21,9 +25,9 @@ composer create-project commandstring/dphp-bot
 [DiscordPHP Documentation](https://discord-php.github.io/DiscordPHP/)
 
 [DiscordPHP Discord Server](https://discord.gg/kM7wrJUYU9)
-*Only ask questions relevant to using DiscordPHP's own wrapper, not on how to use this.*
+*Only ask questions relevant to DiscordPHP's own wrapper, not on how to use this.*
 
-#[Developer Hub]()
+[Developer Hub](https://discord.gg/TgrcSkuDtQ) *Issues about this template can be asked here*
 
 # Configuration
 
@@ -112,3 +116,15 @@ class Ready implements Init
     }
 }
 ```
+
+# Hot Reloading
+
+This template has a built-in HMR (Hot Module Reloading) system.
+Which essentially means that while you're developing your
+bot.
+
+The code will automatically be updated without having to restart the bot.
+Set HMR in your `.env` file to `true` to enable it. 
+
+**Note: HMR only works on Commands and Events. (~~for now~~)**
+
