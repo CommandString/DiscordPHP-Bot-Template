@@ -10,6 +10,7 @@ An unofficial way to structure a discordPHP bot.
 * [Slash Commands](#slash-commands)
 * [Events](#events)
 * [Disabling Commands and Events](#disabling-commands-and-events)
+* [Hot Reloading](#hot-reloading)
 
 # Installation
 
