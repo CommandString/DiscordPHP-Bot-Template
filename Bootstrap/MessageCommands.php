@@ -10,7 +10,7 @@ use Core\System;
 use function Core\doesClassHaveAttribute;
 use function Core\getFilePathFromClass;
 
-// this is just an example, that i capeable to handles
+// this is just an example, that it capeable to handles
 // $msgCommands = [
 //     "mangadex" => [
 //         "className" => MangaDex::class,
@@ -21,7 +21,7 @@ use function Core\getFilePathFromClass;
 //         ],
 //         "method" => "sendHelp",
 //         "instance" => null,
-//     ],
+//     ],   
 //     // Other commands...
 // ];
 
