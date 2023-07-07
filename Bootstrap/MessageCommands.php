@@ -10,7 +10,7 @@ use Core\Disabled;
 use function Core\doesClassHaveAttribute;
 use function Core\getFilePathFromClass;
 
-// this is just an example, that it capeable to handles
+//This is just an example, of how it is capable of handles
 // $msgCommands = [
 //     "mangadex" => [
 //         "className" => MangaDex::class,
