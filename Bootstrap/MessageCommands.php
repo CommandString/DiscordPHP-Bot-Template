@@ -11,6 +11,7 @@ use function Core\doesClassHaveAttribute;
 use function Core\getFilePathFromClass;
 
 //This is just an example, of how it is capable of handles
+// this command can handle a command with 2 subcommand and 1 default subcommand
 // $msgCommands = [
 //     "mangadex" => [
 //         "className" => MangaDex::class,
