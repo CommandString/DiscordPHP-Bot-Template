@@ -2,6 +2,7 @@
 
 namespace Core\Commands;
 
+use ArrayAccess;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command as DiscordCommand;
 use LogicException;
@@ -35,7 +36,7 @@ class QueuedCommand
             $command = $command->jsonSerialize();
         }
 
-        $areTheSame = static function (array $a, array $b) use (&$areTheSame): bool {
+        $areTheSame = static function (array|ArrayAccess $a, array|ArrayAccess $b) use (&$areTheSame): bool {
             $ignoreFields = ['default_permission'];
 
             foreach ($a as $key => $value) {
@@ -45,7 +46,7 @@ class QueuedCommand
                     continue;
                 }
 
-                if (is_array($value) && is_array($bValue)) {
+                if (is_array($value) && (is_array($bValue) || $bValue instanceof ArrayAccess)) {
                     if (!$areTheSame($value, $bValue)) {
                         return false;
                     }
