@@ -11,7 +11,7 @@ use function Core\discord;
 use function Core\doesClassHaveAttribute;
 use function Core\loopClasses;
 
-$commandQueue = new CommandQueue();
+$commandQueue = Config::AUTO_REGISTER_COMMANDS ? new CommandQueue() : null;
 $discord = discord();
 loopClasses(BOT_ROOT . '/Commands', static function (string $className) use ($commandQueue) {
     debug('Loading Command: ' . $className);
@@ -23,13 +23,13 @@ loopClasses(BOT_ROOT . '/Commands', static function (string $className) use ($co
         return;
     }
 
-    $commandQueue->appendCommand(new QueuedCommand(
+    $commandQueue?->appendCommand(new QueuedCommand(
         $attribute->newInstance(),
         new $className()
     ));
 });
 
-$commandQueue->runQueue()->then(static function (array $commands) {
+$commandQueue?->runQueue()->then(static function (array $commands) {
     foreach ($commands as $name => &$command) {
         $file = BOT_ROOT . '\\' . $command[0]->handler::class . '.php';
 
