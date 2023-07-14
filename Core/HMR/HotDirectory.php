@@ -11,9 +11,7 @@ use function Core\discord;
 class HotDirectory extends EventEmitter
 {
     public const EVENT_FILE_CHANGED = 'fileChanged';
-
     public const EVENT_FILE_ADDED = 'fileAdded';
-
     public const EVENT_FILE_REMOVED = 'fileRemoved';
 
     /** @var HotFile[] */

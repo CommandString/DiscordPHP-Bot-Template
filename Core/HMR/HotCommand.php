@@ -23,7 +23,6 @@ class HotCommand extends EventEmitter
     public const EVENT_RELOAD = 'reload';
 
     protected ?HotCache $cachedScript = null;
-
     protected HotFile $file;
 
     public function __construct(

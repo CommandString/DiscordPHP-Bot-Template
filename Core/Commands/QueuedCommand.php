@@ -10,7 +10,6 @@ use LogicException;
 class QueuedCommand
 {
     protected bool $needsRegistered = false;
-
     public readonly string $name;
 
     public function __construct(

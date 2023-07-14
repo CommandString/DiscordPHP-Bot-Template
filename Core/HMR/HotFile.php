@@ -10,7 +10,6 @@ use function Core\discord;
 class HotFile extends EventEmitter
 {
     public const EVENT_CHANGED = 'hasChanged';
-
     public const EVENT_REMOVED = 'removed';
 
     protected string $hash = '';
