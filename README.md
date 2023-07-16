@@ -97,6 +97,8 @@ class Ready implements Init
 }
 ```
 
+If the interface doesn't exist use the [Class Reference](https://discord-php.github.io/DiscordPHP/guide/events/index.html). Just create a interface that has a handle methods with args that match up with the ones in the event. Then sit it inside `/Core/Events`
+
 # Disabling Commands and Events
 
 If you want to disable a command handler or event listener attach the `Core\Commands\Disabled` attribute to it.
