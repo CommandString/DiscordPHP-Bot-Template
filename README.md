@@ -10,7 +10,9 @@ An unofficial way to structure a discordPHP bot.
 * [Slash Commands](#slash-commands)
 * [Events](#events)
 * [Disabling Commands and Events](#disabling-commands-and-events)
-* [Hot Reloading](#hot-reloading)
+* [Extending The Template](#extending-the-template)
+  * [Bootstrap Sequence](#bootstrap-sequence)
+  * [Environment Variables](#environment-variables)
 
 # Installation
 
@@ -117,14 +119,14 @@ class Ready implements Init
 }
 ```
 
-# Hot Reloading
+# Extending The Template
 
-This template has a built-in HMR (Hot Module Reloading) system.
-Which essentially means that while you're developing your
-bot.
+## Bootstrap Sequence
 
-The code will automatically be updated without having to restart the bot.
-Set HMR in your `.env` file to `true` to enable it. 
+Create a file inside `/Bootstrap` and then require it inside of `/Boostrap/Requires.php`.
 
-**Note: HMR only works on Commands and Events. (~~for now~~)**
+## Environment Variables
 
+Add a doc comment to `/Core/Env.php` and then add the variable to `.env`
+
+*You should also add it to `.env.example`*
