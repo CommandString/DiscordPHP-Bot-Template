@@ -17,7 +17,6 @@ use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use Stringable;
 
 /**
  * Returns the Env instance
@@ -204,22 +203,22 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
 
 // Logging Functions
 
-function log($level, string|Stringable $message, array $context = []): void
+function log($level, string $message, array $context = []): void
 {
     env()->discord->getLogger()->log($level, $message, $context);
 }
 
-function debug(string|Stringable $message, array $context = []): void
+function debug(string $message, array $context = []): void
 {
     env()->discord->getLogger()->debug($message, $context);
 }
 
-function error(string|Stringable $message, array $context = []): void
+function error(string $message, array $context = []): void
 {
     env()->discord->getLogger()->error($message, $context);
 }
 
-function info(string|Stringable $message, array $context = []): void
+function info(string $message, array $context = []): void
 {
     env()->discord->getLogger()->info($message, $context);
 }
