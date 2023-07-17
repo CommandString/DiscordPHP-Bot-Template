@@ -12,13 +12,13 @@ class CommandAttributeTest extends TestCase
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Guild ID must be alphanumeric');
 
-        new Command('not a snowflake');
+        new Command(guild: 'not a snowflake');
     }
 
     public function testItAcceptsGoodSnowflakes(): void
     {
         $this->expectNotToPerformAssertions();
 
-        new Command('1234567890');
+        new Command(guild: '1234567890');
     }
 }
