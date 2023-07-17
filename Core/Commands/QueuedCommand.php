@@ -10,13 +10,13 @@ use LogicException;
 class QueuedCommand
 {
     protected bool $needsRegistered = false;
-    public readonly string $name;
+    public readonly string|array $name;
 
     public function __construct(
         public readonly Command $properties,
         public readonly CommandHandler $handler
     ) {
-        $name = $this->handler->getConfig()->toArray()['name'] ?? null;
+        $name = $this->properties->name ?? $this->handler->getConfig()->toArray()['name'] ?? null;
 
         if ($name === null) {
             $className = get_class($this->handler);
@@ -24,6 +24,11 @@ class QueuedCommand
         }
 
         $this->name = $name;
+    }
+
+    public function getName(): string
+    {
+        return is_array($this->name) ? $this->name[0] : $this->name;
     }
 
     public function hasCommandChanged(DiscordCommand $rCommand): bool
@@ -36,7 +41,7 @@ class QueuedCommand
         }
 
         $areTheSame = static function (array|ArrayAccess $a, array|ArrayAccess $b) use (&$areTheSame): bool {
-            $ignoreFields = ['default_permission'];
+            $ignoreFields = ['default_permission', 'required'];
 
             foreach ($a as $key => $value) {
                 $bValue = $b[$key] ?? null;
