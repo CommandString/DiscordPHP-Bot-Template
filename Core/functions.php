@@ -232,7 +232,11 @@ function loopClasses(string $directory, callable $callback): void
 {
     $convertPathToNamespace = static fn (string $path): string => str_replace([realpath(BOT_ROOT), '/'], ['', '\\'], $path);
 
-    foreach (FileSystemUtils::getAllFilesWithExtensions($directory, ['php']) as $file) {
+    foreach (FileSystemUtils::getAllFiles($directory, true) as $file) {
+        if (!str_ends_with($file, '.php')) {
+            continue;
+        }
+
         $className = basename($file, '.php');
         $path = dirname($file);
         $namespace = $convertPathToNamespace($path);
