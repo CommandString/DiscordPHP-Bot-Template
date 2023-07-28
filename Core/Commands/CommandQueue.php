@@ -153,7 +153,7 @@ class CommandQueue
 
     public static function queueAndRunCommands(bool $loadCommands = true, bool $registerCommands = true, QueuedCommand ...$commands): PromiseInterface
     {
-        $queue = (new self());
+        $queue = (new static());
 
         foreach ($commands as $command) {
             $queue->appendCommand($command);

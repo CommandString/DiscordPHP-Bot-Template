@@ -27,7 +27,7 @@ function env(): Env
 {
     $env = Env::get();
 
-    if ($env === null) {
+    if (!isset($env)) {
         throw new LogicException('Env is not set');
     }
 
@@ -41,11 +41,7 @@ function env(): Env
  */
 function discord(): ?Discord
 {
-    if (!isset(env()->discord)) {
-        return null;
-    }
-
-    return env()->discord;
+    return env()->discord ?? null;
 }
 
 /**
@@ -193,7 +189,7 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
             $options = $option?->options;
         }
 
-        if ($options === null || $option === null) {
+        if (!isset($options, $option)) {
             break;
         }
     }
@@ -205,22 +201,22 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
 
 function log($level, string $message, array $context = []): void
 {
-    env()->discord->getLogger()->log($level, $message, $context);
+    discord()?->getLogger()->log($level, $message, $context);
 }
 
 function debug(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->debug($message, $context);
+    discord()?->getLogger()->debug($message, $context);
 }
 
 function error(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->error($message, $context);
+    discord()?->getLogger()->error($message, $context);
 }
 
 function info(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->info($message, $context);
+    discord()?->getLogger()->info($message, $context);
 }
 
 // Internal Functions //
@@ -263,7 +259,7 @@ function doesClassHaveAttribute(string $class, string $attribute): object|false
 
 function deleteAllFilesInDirectory(string $directory): void
 {
-    if (is_dir($directory) === false) {
+    if (!is_dir($directory)) {
         return;
     }
 

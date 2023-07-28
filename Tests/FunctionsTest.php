@@ -21,12 +21,12 @@ class FunctionsTest extends TestCase
     {
         $button = newButton(Button::STYLE_DANGER, 'DANGER');
 
-        $this->assertEquals($button->getLabel(), 'DANGER');
-        $this->assertEquals($button->getStyle(), Button::STYLE_DANGER);
+        $this->assertEquals('DANGER', $button->getLabel());
+        $this->assertEquals(Button::STYLE_DANGER, $button->getStyle());
 
         $button = newButton(Button::STYLE_PRIMARY, 'PRIMARY', 'primary_button');
-        $this->assertEquals($button->getLabel(), 'PRIMARY');
-        $this->assertEquals($button->getStyle(), Button::STYLE_PRIMARY);
-        $this->assertEquals($button->getCustomId(), 'primary_button');
+        $this->assertEquals('PRIMARY', $button->getLabel());
+        $this->assertEquals(Button::STYLE_PRIMARY, $button->getStyle());
+        $this->assertEquals('primary_button', $button->getCustomId());
     }
 }
