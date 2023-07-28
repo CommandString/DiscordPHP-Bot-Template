@@ -13,14 +13,14 @@ class HotDirectory extends EventEmitter
     public const EVENT_FILE_ADDED = 'fileAdded';
     public const EVENT_FILE_REMOVED = 'fileRemoved';
 
-    /** @var HotFile[] */
+    /** @var array<string, HotFile> */
     protected array $files = [];
 
     public function __construct(
         public readonly string $directory,
         int $interval = 1
     ) {
-        if (!file_exists($directory)) {
+        if (!is_dir($directory)) {
             throw new LogicException("Directory {$directory} does not exist");
         }
 
@@ -48,9 +48,6 @@ class HotDirectory extends EventEmitter
         });
     }
 
-    /**
-     * @return HotFile[]
-     */
     public function getFiles(): array
     {
         return $this->files;

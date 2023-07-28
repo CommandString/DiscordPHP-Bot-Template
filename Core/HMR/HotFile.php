@@ -20,7 +20,7 @@ class HotFile extends EventEmitter
         public readonly string $file,
         int $interval = 1
     ) {
-        if (!file_exists($file)) {
+        if (!is_file($file)) {
             throw new LogicException("File {$file} does not exist");
         }
 
@@ -28,9 +28,9 @@ class HotFile extends EventEmitter
         $this->hash = $this->createHash();
 
         $this->timer = Loop::addPeriodicTimer($interval, function () {
-            if (!file_exists($this->file)) {
+            if (!is_file($this->file)) {
                 $this->emit(self::EVENT_REMOVED, [$this]);
-                $this->__destruct();
+                $this->cancel();
 
                 return;
             }
@@ -59,8 +59,13 @@ class HotFile extends EventEmitter
         return $this->createHash() !== $this->hash;
     }
 
-    public function __destruct()
+    private function cancel(): void
     {
         Loop::cancelTimer($this->timer);
+    }
+
+    public function __destruct()
+    {
+        $this->cancel();
     }
 }

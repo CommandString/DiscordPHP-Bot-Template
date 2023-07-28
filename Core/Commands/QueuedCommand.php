@@ -5,10 +5,14 @@ namespace Core\Commands;
 use ArrayAccess;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Command as DiscordCommand;
+use Exception;
 use LogicException;
+use RuntimeException;
 
 class QueuedCommand
 {
+    protected const IGNORE_COMPARISON_FIELDS = ['default_permission', 'required'];
+
     protected bool $needsRegistered = false;
     public readonly string|array $name;
 
@@ -16,9 +20,19 @@ class QueuedCommand
         public readonly Command $properties,
         public readonly CommandHandler $handler
     ) {
-        $name = $this->properties->name ?? $this->handler->getConfig()->toArray()['name'] ?? null;
+        if (!isset($this->properties->name)) {
+            $config = $this->handler->getConfig();
 
-        if ($name === null) {
+            if ($config instanceof CommandBuilder) {
+                $config = $config->toArray();
+            }
+
+            $name = $config['name'] ?? null;
+        } else {
+            $name = $this->properties->name;
+        }
+
+        if (empty($name)) {
             $className = get_class($this->handler);
             throw new LogicException("Command {$className} has no name");
         }
@@ -34,35 +48,48 @@ class QueuedCommand
     public function hasCommandChanged(DiscordCommand $rCommand): bool
     {
         $command = $this->handler->getConfig();
-        $rCommand = $rCommand->jsonSerialize();
+        try {
+            $rCommand = $rCommand->jsonSerialize();
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), previous: $e);
+        }
 
         if ($command instanceof CommandBuilder) {
             $command = $command->jsonSerialize();
         }
 
-        $areTheSame = static function (array|ArrayAccess $a, array|ArrayAccess $b) use (&$areTheSame): bool {
-            $ignoreFields = ['default_permission', 'required'];
+        return static::compareCommands($command, $rCommand);
+    }
 
-            foreach ($a as $key => $value) {
-                $bValue = $b[$key] ?? null;
-
-                if ($value === $bValue || in_array($key, $ignoreFields)) {
-                    continue;
-                }
-
-                if (is_array($value) && (is_array($bValue) || $bValue instanceof ArrayAccess)) {
-                    if (!$areTheSame($value, $bValue)) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
+    protected static function compareCommands(array $command, array|ArrayAccess $other): bool
+    {
+        foreach ($command as $key => $value) {
+            if (in_array($key, static::IGNORE_COMPARISON_FIELDS)) {
+                continue;
             }
 
-            return true;
-        };
+            if (!isset($other[$key])) {
+                return false;
+            }
 
-        return !$areTheSame($command, $rCommand);
+            $otherValue = $other[$key];
+
+            if ($value === $otherValue) {
+                continue;
+            }
+
+            if (is_array($value) && (is_array($otherValue) || $otherValue instanceof ArrayAccess)) {
+                if (!self::compareCommands($value, $otherValue)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     public function setNeedsRegistered(bool $needsRegistered): void
