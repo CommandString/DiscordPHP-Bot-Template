@@ -12,7 +12,7 @@ use Core\Commands\CommandPrefix;
  * @property-read string $TOKEN
  * @property Discord $discord
  * @property DatabaseInterface $db
- * @property MessageCommandRepository $cmdCollection
+ * @property MessageCommandRepository $messageCommandRepository
  * @property CommandPrefix $prefixManager
  */
 class Env extends BaseEnv

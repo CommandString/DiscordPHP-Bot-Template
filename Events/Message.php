@@ -20,13 +20,13 @@ class Message implements MessageCreate
 {
     private $commandExpirationManager;
     private $commandPrefix;
-    private $commandCollection;
+    private $messageCommandRepository;
 
     public function __construct()
     {
         $this->commandExpirationManager = new CommandExpirationManager(d()->getLoop());
         $this->commandPrefix = Env::get()->prefixManager;
-        $this->commandCollection = Env::get()->cmdCollection;
+        $this->messageCommandRepository = Env::get()->messageCommandRepository;
     }
 
     public function handle(ChannelMessage $message, Discord $discord): void
@@ -53,7 +53,7 @@ class Message implements MessageCreate
 
     private function handleCommand(ChannelMessage $message, string $commandName): ?DynamicCommand
     {
-        $command = $this->commandCollection->getCommandMapping($commandName);
+        $command = $this->messageCommandRepository->getCommandMapping($commandName);
 
         if (is_null($command)) {
             return null;
@@ -93,7 +93,7 @@ class Message implements MessageCreate
         $discord = env()->discord;
 
         $embed = (new Embed($discord))
-            ->setTitle('Mesage Command Exception Caught')
+            ->setTitle('Exception Caught')
             ->setDescription('An exception occurred while processing your request.')
             ->setColor('#FF0000') // Set color to red using hexadecimal value
             ->setFooter($discord->username)
