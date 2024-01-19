@@ -10,7 +10,7 @@ class MessageCommandRepository
     /** @var array<MessageCommandHandler> */
     private array $commands = [];
 
-    public function addMsgCommand(MessageCommandHandler $msgCommand): void
+    public function addMessageCommand(MessageCommandHandler $msgCommand): void
     {
         $msgCommand->validate();
         $commandName = $msgCommand->getCommandName();
