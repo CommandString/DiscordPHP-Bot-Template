@@ -1,9 +1,8 @@
 <?php
 
-use Core\System;
+use Core\Env;
 use Database\MySQLServiceProvider;
 
 $database = new MySQLServiceProvider();
 $database->connect();
-
-System::get()->db = $database;
+Env::get()->db = $database;

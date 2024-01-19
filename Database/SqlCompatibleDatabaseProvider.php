@@ -9,15 +9,10 @@ use Core\Env;
 abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
 {
     protected $host;
-
     protected $port;
-
     protected $username;
-
     protected $password;
-
     protected $database;
-
     protected $connection;
 
     public function __construct()

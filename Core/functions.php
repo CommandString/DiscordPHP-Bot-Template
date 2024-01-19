@@ -17,7 +17,6 @@ use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use Stringable;
 
 /**
  * Returns the Env instance
@@ -28,7 +27,7 @@ function env(): Env
 {
     $env = Env::get();
 
-    if ($env === null) {
+    if (!isset($env)) {
         throw new LogicException('Env is not set');
     }
 
@@ -42,16 +41,12 @@ function env(): Env
  */
 function discord(): ?Discord
 {
-    if (!isset(env()->discord)) {
-        return null;
-    }
-
-    return env()->discord;
+    return env()->discord ?? null;
 }
 
 function getFilePathFromClass($className)
 {
-    $reflection = new \ReflectionClass($className);
+    $reflection = new ReflectionClass($className);
 
     return $reflection->getFileName();
 }
@@ -201,7 +196,7 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
             $options = $option?->options;
         }
 
-        if ($options === null || $option === null) {
+        if (!isset($options, $option)) {
             break;
         }
     }
@@ -211,24 +206,24 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
 
 // Logging Functions
 
-function log($level, string|Stringable $message, array $context = []): void
+function log($level, string $message, array $context = []): void
 {
-    env()->discord->getLogger()->log($level, $message, $context);
+    discord()?->getLogger()->log($level, $message, $context);
 }
 
-function debug(string|Stringable $message, array $context = []): void
+function debug(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->debug($message, $context);
+    discord()?->getLogger()->debug($message, $context);
 }
 
-function error(string|Stringable $message, array $context = []): void
+function error(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->error($message, $context);
+    discord()?->getLogger()->error($message, $context);
 }
 
-function info(string|Stringable $message, array $context = []): void
+function info(string $message, array $context = []): void
 {
-    env()->discord->getLogger()->info($message, $context);
+    discord()?->getLogger()->info($message, $context);
 }
 
 // Internal Functions //
@@ -240,7 +235,11 @@ function loopClasses(string $directory, callable $callback): void
 {
     $convertPathToNamespace = static fn (string $path): string => str_replace([realpath(BOT_ROOT), '/'], ['', '\\'], $path);
 
-    foreach (FileSystemUtils::getAllFilesWithExtensions($directory, ['php']) as $file) {
+    foreach (FileSystemUtils::getAllFiles($directory, true) as $file) {
+        if (!str_ends_with($file, '.php')) {
+            continue;
+        }
+
         $className = basename($file, '.php');
         $path = dirname($file);
         $namespace = $convertPathToNamespace($path);
@@ -267,7 +266,7 @@ function doesClassHaveAttribute(string $class, string $attribute): object|false
 
 function deleteAllFilesInDirectory(string $directory): void
 {
-    if (is_dir($directory) === false) {
+    if (!is_dir($directory)) {
         return;
     }
 

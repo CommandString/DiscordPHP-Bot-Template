@@ -4,10 +4,10 @@ use Core\Commands\Command;
 use Core\Commands\CommandQueue;
 use Core\Commands\QueuedCommand;
 use Core\Disabled;
-use Core\HMR\HotCommand;
 
 use function Core\discord;
 use function Core\doesClassHaveAttribute;
+use function Core\error;
 use function Core\loopClasses;
 
 $commandQueue = new CommandQueue();
@@ -26,14 +26,4 @@ loopClasses(BOT_ROOT . '/Commands/Slash', static function (string $className) us
     ));
 });
 
-$commandQueue->runQueue()->then(static function (array $commands) {
-    foreach ($commands as $name => &$command) {
-        $file = BOT_ROOT . '\\' . $command[0]->handler::class . '.php';
-
-        new HotCommand(
-            $name,
-            $command[1],
-            $file
-        );
-    }
-})->otherwise(static fn (Throwable $e) => $discord->getLogger()->error($e->getMessage()));
+$commandQueue->runQueue(registerCommands: Config::AUTO_REGISTER_COMMANDS)->otherwise(static fn (Throwable $e) => error($e->getMessage()));

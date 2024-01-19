@@ -3,32 +3,34 @@
 namespace Core\HMR;
 
 use Evenement\EventEmitter;
+use LogicException;
 use React\EventLoop\Loop;
-
-use function Core\discord;
+use React\EventLoop\TimerInterface;
 
 class HotFile extends EventEmitter
 {
     public const EVENT_CHANGED = 'hasChanged';
-
     public const EVENT_REMOVED = 'removed';
 
     protected string $hash = '';
+    public readonly string $name;
+    private TimerInterface $timer;
 
     public function __construct(
-        public readonly string $file
+        public readonly string $file,
+        int $interval = 1
     ) {
-        if (!file_exists($file)) {
-            discord()->getLogger()->error("File {$file} does not exist");
-
-            return;
+        if (!is_file($file)) {
+            throw new LogicException("File {$file} does not exist");
         }
 
+        $this->name = basename($file);
         $this->hash = $this->createHash();
 
-        Loop::addPeriodicTimer(1, function () {
-            if (!file_exists($this->file)) {
+        $this->timer = Loop::addPeriodicTimer($interval, function () {
+            if (!is_file($this->file)) {
                 $this->emit(self::EVENT_REMOVED, [$this]);
+                $this->cancel();
 
                 return;
             }
@@ -37,7 +39,6 @@ class HotFile extends EventEmitter
                 return;
             }
 
-            discord()->getLogger()->debug("File {$this->file} has changed");
             $this->hash = $this->createHash();
             $this->emit(self::EVENT_CHANGED, [$this]);
         });
@@ -56,5 +57,15 @@ class HotFile extends EventEmitter
     public function hasChanged(): bool
     {
         return $this->createHash() !== $this->hash;
+    }
+
+    private function cancel(): void
+    {
+        Loop::cancelTimer($this->timer);
+    }
+
+    public function __destruct()
+    {
+        $this->cancel();
     }
 }

@@ -3,22 +3,21 @@
 namespace Core\Manager;
 
 use Core\Commands\CommandPrefix;
-use Core\Database\DatabaseInterface;
 
 use function Core\env;
 
 /**
- * To manage Prefix using the database
+ * To manage Prefix using JSON, in case if you dont want to use an actual DB
  */
-class PrefixManager implements CommandPrefix
+class JsonPrefixManager implements CommandPrefix
 {
     private $cache = [];
-    private $database;
+    private $jsonFileName;
     private $defaultPrefix;
 
-    public function __construct(DatabaseInterface $database)
+    public function __construct(string $jsonFileName)
     {
-        $this->database = $database;
+        $this->jsonFileName = $jsonFileName;
         $this->defaultPrefix = env()->DEFAULT_PREFIX;
         // Load all prefixes into the cache during instantiation
         $this->loadAllPrefixes();
@@ -26,23 +25,29 @@ class PrefixManager implements CommandPrefix
 
     private function loadAllPrefixes()
     {
-        // Fetch all guilds' prefixes from the database
-        $result = $this->database->query('SELECT id, prefix FROM guilds')->fetchAll();
+        $jsonData = file_get_contents($this->jsonFileName);
+
+        $data = json_decode($jsonData, true);
 
         // Cache the prefixes
-        foreach ($result as $row) {
-            $this->cache[$row['id']] = $row['prefix'];
+        if (is_array($data)) {
+            $this->cache = $data;
         }
+    }
+
+    private function saveAllPrefixes()
+    {
+        $jsonData = json_encode($this->cache, JSON_PRETTY_PRINT);
+
+        file_put_contents($this->jsonFileName, $jsonData);
     }
 
     public function getPrefix(string $guildId): string
     {
-        // Check if prefix is cached, and
         if (isset($this->cache[$guildId])) {
             return $this->cache[$guildId];
         }
 
-        // If a custom prefix is not set, use the default prefix,
         return $this->defaultPrefix;
     }
 
@@ -51,9 +56,9 @@ class PrefixManager implements CommandPrefix
         // Update prefix in the cache
         $this->cache[$guildId] = $prefix;
 
-        // Update prefix in the database
-        $success = $this->database->query("UPDATE guilds SET prefix = '{$prefix}' WHERE id = '{$guildId}'");
+        // Save the updated cache to the JSON file
+        $this->saveAllPrefixes();
 
-        return (bool) $success;
+        return true; // Assuming saving to the file always succeeds
     }
 }

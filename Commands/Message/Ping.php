@@ -2,21 +2,21 @@
 
 namespace Commands\Message;
 
-use Core\Commands\BaseDynamicCommand;
-use Core\Commands\MessageCommand;
+use Core\Commands\DynamicCommand;
 use Discord\Parts\Channel\Message;
+use Core\Commands\MessageCommand;
+use Exception;
 
 #[MessageCommand]
-class Ping extends BaseDynamicCommand
+class Ping extends DynamicCommand
 {
     public function __construct()
     {
-        $this->setTimeLimit(time());
-        $this->addTimeLimit(1);
+
     }
 
     public function sendPing(Message $message)
     {
-        $message->reply('pong!');
+        throw new Exception('Exception Test');
     }
 }
