@@ -7,7 +7,13 @@ use Core\Commands\CommandPrefix;
 use function Core\env;
 
 /**
- * To manage Prefix using JSON, in case if you dont want to use an actual DB
+ * To manage Prefixes using JSON, in case if you dont want to use an actual DB
+ *
+ * The Schema that are needed
+ * {
+ * "guild_id_1": "prefix1",
+ * "guild_id_2": "prefix2",
+ * }
  */
 class JsonPrefixManager implements CommandPrefix
 {

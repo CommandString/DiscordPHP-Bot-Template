@@ -59,7 +59,6 @@ class Message implements MessageCreate
             return null;
         }
 
-        //
         if ($command->instance instanceof DynamicCommand) {
             $this->executeDynamicCommand($command->instance, $command->method, $message);
 
@@ -77,7 +76,7 @@ class Message implements MessageCreate
         }
     }
 
-    private function executeStaticCommand($commandInstance, string $methodName, ChannelMessage $message): void
+    private function executeStaticCommand(object $commandInstance, string $methodName, ChannelMessage $message): void
     {
         $commandInstance->$methodName($message);
         unset($commandInstance);

@@ -11,6 +11,6 @@ $pingCommand = MessageCommandHandler::new()
 
 $commandRepository = new Core\Commands\MessageCommandRepository();
 
-$commandRepository->addMessageCommand($pingCommand);
+$commandRepository->addCommand($pingCommand);
 
-Env::get()->cmdRepository = $commandRepository;
+Env::get()->messageCommandRepository = $commandRepository;

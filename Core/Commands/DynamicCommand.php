@@ -3,24 +3,31 @@
 namespace Core\Commands;
 
 /**
- * A Base Class for Dynamic type Command
+ * Class DynamicCommand
+ *
+ * A base class for dynamic type commands with expiration functionality.
  */
 abstract class DynamicCommand
 {
     /**
-     * @var int The time when the command instance was created.
+     * @var int The UNIX time when the command instance was created.
      */
     protected $startTime;
 
     /**
-     * @var int The time limit in seconds.
+     * @var int The instance expiration UNIX time in seconds.
      */
     protected $endLimit;
 
+    /**
+     * DynamicCommand constructor.
+     *
+     * Initializes the command with a start time and default expiration of 30 minutes.
+     */
     public function __construct()
     {
         $this->setTimeLimit(time());
-        // By Defailt it will asign 30 min for expiration countdown
+        // By default, it will assign 30 minutes for expiration countdown
         $this->addTimeLimit(30);
     }
 
@@ -32,13 +39,18 @@ abstract class DynamicCommand
         $this->startTime = time();
     }
 
-    public function getTimeLimit()
+    /**
+     * Gets the time limit of the command.
+     *
+     * @return int The time limit in seconds.
+     */
+    public function getTimeLimit(): int
     {
         return $this->endLimit;
     }
 
     /**
-     * Manualy Set timeLimit using UNIXTIME to set the time limit for the command.
+     * Sets the time limit for the command using UNIX time.
      *
      * @param int $timeLimit The time limit in seconds.
      *
@@ -47,13 +59,13 @@ abstract class DynamicCommand
     public function setTimeLimit(int $timeLimit): void
     {
         if ($timeLimit < $this->startTime) {
-            throw new \logicException('Attempted to set a value less than the time the command was instantiated.');
+            throw new \LogicException('Attempted to set a value less than the time the command was instantiated.');
         }
         $this->endLimit = $timeLimit;
     }
 
     /**
-     * Adds a time to the time limit of the command.
+     * Adds time to the existing time limit of the command.
      *
      * @param int $minutes The number of minutes to add to the time limit.
      */
@@ -76,7 +88,9 @@ abstract class DynamicCommand
     }
 
     /**
-     * __destruct, will unset assosiated the properties inside the curent object
+     * Destructor for DynamicCommand.
+     *
+     * Unsets associated properties inside the current object.
      *
      * @return void
      */

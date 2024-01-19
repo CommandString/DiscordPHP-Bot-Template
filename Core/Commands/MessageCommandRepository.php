@@ -2,15 +2,24 @@
 
 namespace Core\Commands;
 
+use LogicException;
+
 /**
- *  The purpose of this class is to serve as a repository for managing message commands, providing methods to add, retrieve, and validate commands, as well as checking the existence of specific commands
+ *  This class is to serve as a repository for managing message commands, providing methods to add, retrieve, and validate commands, as well as checking the existence of specific commands
  */
 class MessageCommandRepository
 {
     /** @var array<MessageCommandHandler> */
     private array $commands = [];
 
-    public function addMessageCommand(MessageCommandHandler $msgCommand): void
+    /**
+     * Adds a MessageCommandHandler to the command manager.
+     *
+     * @param MessageCommandHandler $msgCommand The MessageCommandHandler instance to be added.
+     *
+     * @throws LogicException If the provided MessageCommandHandler fails validation.
+     */
+    public function addCommand(MessageCommandHandler $msgCommand): void
     {
         $msgCommand->validate();
         $commandName = $msgCommand->getCommandName();
@@ -19,18 +28,21 @@ class MessageCommandRepository
     }
 
     /**
-     * getCommandMap
+     * Retrieves the command mapping for the specified command and optional subcommand.
      *
-     * @param  string $commands passed command with prefix excluded
+     * @param string $commands The full command string (excluding any prefix) containing the command and optional subcommand.
+     *
+     * @return object|null An object representing the command mapping, or null if the specified command or subcommand is not found.
+     *                      The object structure includes the command instance and method to be executed.
+     *                      - instance: An instance of the command class created using the createInstance method.
+     *                      - method: The method to be executed, either the specified subcommand method or the default method
+     *                        if no subcommand is provided or if the specified subcommand is not found.
      */
     public function getCommandMapping(string $commands): ?object
     {
-        $subCommand = null;
-        $exploded = explode(' ', $commands);
+        $exploded = explode(' ', $commands, 3);
         $commandName = $exploded[0];
-        if (isset($exploded[1])) {
-            $subCommand = $exploded[1];
-        }
+        $subCommand = $exploded[1] ?? null;
 
         if (isset($this->commands[$commandName])) {
             $msgCommand = $this->commands[$commandName];
@@ -57,19 +69,23 @@ class MessageCommandRepository
     }
 
     /**
-     * doesCommandExist, to check if the command exist
+     * Checks if a command exists and, optionally, if a subcommand exists for the specified command.
      *
-     * @param  string $commands passed command string with prefix excluded
+     * @param string $commandName The name of the command to check for existence.
+     * @param string|null $subCommandName The name of the subcommand to check for existence (optional).
+     *
+     * @return bool True if the command exists. If $subCommandName is provided, returns false
+     *              if the subcommand does not exist for the specified command.
      */
-    public function doesCommandExist($commands): bool
+    public function doesCommandExist(string $commandName, ?string $subCommandName = null): bool
     {
-        [$commandName, $subCommand] = explode(' ', $commands, 2);
-
         if (isset($this->commands[$commandName])) {
             $msgCommand = $this->commands[$commandName];
 
-            if ($subCommand && $msgCommand->getSubCommand($subCommand)) {
-                return true;
+            if ($subCommandName !== null) {
+                $subCommandExists = $msgCommand->getSubCommand($subCommandName);
+
+                return $subCommandExists !== null;
             }
 
             return true;

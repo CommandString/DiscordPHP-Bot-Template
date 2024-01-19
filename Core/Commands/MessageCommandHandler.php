@@ -4,16 +4,41 @@ namespace Core\Commands;
 
 use Core\HMR\InstanceHandler;
 
+/**
+ * Class MessageCommandHandler
+ *
+ * Designed to manage and handle various commands, providing a structured way to define and handle different commands by encapsulating information
+ * such as command name, command class, subcommands, and default methods.
+ */
 class MessageCommandHandler
 {
+    /**
+     * @var string The name of the command.
+     */
     protected string $commandName;
+
+    /**
+     * @var string The class name associated with the command.
+     */
     protected string $commandClass;
+
+    /**
+     * @var string The default method name for the command.
+     */
     protected string $defaultMethod;
+
+    /**
+     * @var array Associative array of subcommands and their associated method names.
+     */
     protected array $subCommands = [];
+
+    /**
+     * @var InstanceHandler|null An optional instance manager for creating instances of the command class.
+     */
     protected ?InstanceHandler $instanceManager = null;
 
     /**
-     * Static factory method to create a new instance of MessageCommand.
+     * Static factory method to create a new instance of MessageCommandHandler.
      */
     public static function new(): self
     {
@@ -22,6 +47,8 @@ class MessageCommandHandler
 
     /**
      * Set the command name.
+     *
+     * @return $this
      */
     public function setCommandName(string $commandName): self
     {
@@ -32,6 +59,8 @@ class MessageCommandHandler
 
     /**
      * Add a subcommand with its associated method name.
+     *
+     * @return $this
      */
     public function addSubCommand(string $subCommandName, string $methodName): self
     {
@@ -41,7 +70,9 @@ class MessageCommandHandler
     }
 
     /**
-     * Set the default method name, as default it'll use handle()
+     * Set the default method name, as default it'll use handle().
+     *
+     * @return $this
      */
     public function setDefaultMethod(string $methodName = 'handle'): self
     {
@@ -52,6 +83,8 @@ class MessageCommandHandler
 
     /**
      * Set the command class name.
+     *
+     * @return $this
      */
     public function setCommandClass(string $className): self
     {
@@ -62,6 +95,8 @@ class MessageCommandHandler
 
     /**
      * Set the instance manager for creating instances of the command class.
+     *
+     * @return $this
      */
     public function setInstanceManager(InstanceHandler $instanceManager): self
     {
@@ -72,7 +107,7 @@ class MessageCommandHandler
     }
 
     /**
-     * Validate the required properties of the MessageCommand.
+     * Validate the required properties of the MessageCommandHandler.
      *
      * @throws \LogicException If any of the required properties are empty.
      */
@@ -89,7 +124,6 @@ class MessageCommandHandler
         if (empty($this->defaultMethod)) {
             throw new \LogicException('Default Method of Command Class is required!');
         }
-
     }
 
     /**
@@ -133,7 +167,7 @@ class MessageCommandHandler
     }
 
     /**
-     * Create an instance of the command class
+     * Create an instance of the command class.
      *
      * @return mixed
      */

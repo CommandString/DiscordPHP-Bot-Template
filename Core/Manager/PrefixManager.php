@@ -8,7 +8,7 @@ use Core\Database\DatabaseInterface;
 use function Core\env;
 
 /**
- * To manage Prefix using the database
+ * To manage Prefixes using the database
  */
 class PrefixManager implements CommandPrefix
 {
