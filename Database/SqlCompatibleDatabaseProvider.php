@@ -21,7 +21,7 @@ abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
         $this->username = Env::get()->USERNAME;
         $this->password = Env::get()->PASSWORD;
         $this->database = Env::get()->DATABASE;
-        $this->port = Env::get()->PORTt;
+        $this->port = Env::get()->PORT;
 
     }
 
