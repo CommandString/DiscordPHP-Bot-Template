@@ -33,6 +33,11 @@ abstract class SqlCompatibleDatabaseProvider implements DatabaseInterface
             // Add additional connection options here if needed
         ];
 
+        /**
+         * Note: You can opt for a non-database mode by following these steps:
+         * - Disable the database-related lines inside Bootstrap/Database.php.
+         * - Modify the PrefixManager to use JSON instead of the database in Bootstrap/Prefix.php.
+         */
         $this->connection = new PDO($dsn, $this->username, $this->password, $options);
     }
 
