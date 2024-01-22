@@ -34,7 +34,7 @@ class CommandExpirationManager
     public function cleanupCommands(): void
     {
         foreach ($this->commandInstances as $key => $command) {
-            if ($command->isCommandExpired()) {
+            if ($command->isExpired()) {
                 debug("Begin to free expired instance of command ['" . $command::class . "']");
                 unset($this->commandInstances[$key]);
                 unset($command);
