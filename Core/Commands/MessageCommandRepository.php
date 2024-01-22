@@ -63,7 +63,7 @@ class MessageCommandRepository
         return null;
     }
 
-    public function getCommandInstanceHandler($commandName)
+    public function getCommandInstanceManager($commandName)
     {
         return $this->commands[$commandName] ?? null;
     }
