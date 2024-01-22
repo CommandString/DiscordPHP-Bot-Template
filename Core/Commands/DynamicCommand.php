@@ -80,7 +80,7 @@ abstract class DynamicCommand
      *
      * @return bool True if the command has expired, false otherwise.
      */
-    public function isCommandExpired(): bool
+    public function isExpired(): bool
     {
         $currentTime = time();
 
