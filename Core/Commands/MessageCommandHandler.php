@@ -2,7 +2,7 @@
 
 namespace Core\Commands;
 
-use Core\HMR\InstanceHandler;
+use Core\HMR\InstanceManager;
 
 /**
  * Class MessageCommandHandler
@@ -33,9 +33,9 @@ class MessageCommandHandler
     protected array $subCommands = [];
 
     /**
-     * @var InstanceHandler|null An optional instance manager for creating instances of the command class.
+     * @var InstanceManager|null An optional instance manager for creating instances of the command class.
      */
-    protected ?InstanceHandler $instanceManager = null;
+    protected ?InstanceManager $instanceManager = null;
 
     /**
      * Static factory method to create a new instance of MessageCommandHandler.
@@ -98,7 +98,7 @@ class MessageCommandHandler
      *
      * @return $this
      */
-    public function setInstanceManager(InstanceHandler $instanceManager): self
+    public function setInstanceManager(InstanceManager $instanceManager): self
     {
         $this->instanceManager = $instanceManager;
         $this->instanceManager->set($this->commandName, $this->commandClass);
