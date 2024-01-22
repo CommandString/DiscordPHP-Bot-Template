@@ -2,7 +2,7 @@
 
 namespace Core\HMR;
 
-class DummyHotClass implements InstanceHandler
+class DummyHotClass implements InstanceManager
 {
     public readonly string $className;
 
