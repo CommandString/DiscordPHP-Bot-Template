@@ -2,7 +2,7 @@
 
 namespace Core\HMR;
 
-interface InstanceHandler
+interface InstanceManager
 {
     public function createInstance();
 
